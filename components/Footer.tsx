@@ -52,7 +52,7 @@ export function Footer() {
               </li>
               <li>
                 <Link href="/order" className="text-gray-400 hover:text-white transition-colors font-sarabun">
-                  สั่งซื้อ
+                  ขอใบเสนอราคา
                 </Link>
               </li>
               <li>

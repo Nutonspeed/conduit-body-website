@@ -12,7 +12,7 @@ import { cn } from "@/lib/utils"
 const navigation = [
   { name: "หน้าแรก", href: "/" },
   { name: "สินค้า", href: "/products" },
-  { name: "สั่งซื้อ", href: "/order" },
+  { name: "ขอใบเสนอราคา", href: "/order" },
   { name: "เกี่ยวกับเรา", href: "/about" },
   { name: "ติดต่อ", href: "/contact" },
 ]

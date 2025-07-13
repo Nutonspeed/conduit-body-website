@@ -21,7 +21,7 @@ const realtimeData = {
     { page: "/", views: 456, title: "หน้าแรก" },
     { page: "/products", views: 234, title: "สินค้า" },
     { page: "/products/lb-series", views: 189, title: "LB Series" },
-    { page: "/order", views: 156, title: "สั่งซื้อ" },
+  { page: "/order", views: 156, title: "ขอใบเสนอราคา" },
     { page: "/products/t-series", views: 98, title: "T Series" },
   ],
 }

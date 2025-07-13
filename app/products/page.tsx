@@ -363,7 +363,7 @@ export default function ProductsPage() {
                               <Link href={`/products/${product.slug}`}>ดูรายละเอียด</Link>
                             </Button>
                             <Button asChild variant="outline" size="sm">
-                              <Link href={`/order?product=${product.slug}`}>สั่งซื้อ</Link>
+                              <Link href={`/order?product=${product.slug}`}>ขอใบเสนอราคา</Link>
                             </Button>
                           </div>
                         </CardContent>
@@ -411,7 +411,7 @@ export default function ProductsPage() {
                                   <Link href={`/products/${product.slug}`}>ดูรายละเอียด</Link>
                                 </Button>
                                 <Button asChild variant="outline" size="sm">
-                                  <Link href={`/order?product=${product.slug}`}>สั่งซื้อ</Link>
+                                  <Link href={`/order?product=${product.slug}`}>ขอใบเสนอราคา</Link>
                                 </Button>
                               </div>
                             </div>
