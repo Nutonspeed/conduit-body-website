@@ -14,12 +14,14 @@ import { Slider } from "@/components/ui/slider"
 import { Search, Filter, Grid, List } from "lucide-react"
 import { products } from "@/lib/mockData"
 import { FadeInSection, SlideInSection } from "@/components/AnimatedComponents"
+import { useQuoteCartStore } from "@/lib/store"
 
 type SortOption = "name" | "price-low" | "price-high" | "type"
 type ViewMode = "grid" | "list"
 
 export default function ProductsPage() {
   const searchParams = useSearchParams()
+  const { addItem } = useQuoteCartStore()
   const [searchTerm, setSearchTerm] = useState("")
   const [selectedTypes, setSelectedTypes] = useState<string[]>([])
   const [selectedMaterials, setSelectedMaterials] = useState<string[]>([])
@@ -362,8 +364,20 @@ export default function ProductsPage() {
                             <Button asChild className="flex-1" size="sm">
                               <Link href={`/products/${product.slug}`}>ดูรายละเอียด</Link>
                             </Button>
-                            <Button asChild variant="outline" size="sm">
-                              <Link href={`/order?product=${product.slug}`}>ขอใบเสนอราคา</Link>
+                            <Button
+                              size="sm"
+                              variant="outline"
+                              onClick={() =>
+                                addItem({
+                                  productId: product.id,
+                                  productName: product.name,
+                                  size: product.sizes[0],
+                                  quantity: 1,
+                                  price: product.basePrice,
+                                })
+                              }
+                            >
+                              เพิ่มลงคำขอ
                             </Button>
                           </div>
                         </CardContent>
@@ -410,8 +424,20 @@ export default function ProductsPage() {
                                 <Button asChild size="sm">
                                   <Link href={`/products/${product.slug}`}>ดูรายละเอียด</Link>
                                 </Button>
-                                <Button asChild variant="outline" size="sm">
-                                  <Link href={`/order?product=${product.slug}`}>ขอใบเสนอราคา</Link>
+                                <Button
+                                  size="sm"
+                                  variant="outline"
+                                  onClick={() =>
+                                    addItem({
+                                      productId: product.id,
+                                      productName: product.name,
+                                      size: product.sizes[0],
+                                      quantity: 1,
+                                      price: product.basePrice,
+                                    })
+                                  }
+                                >
+                                  เพิ่มลงคำขอ
                                 </Button>
                               </div>
                             </div>

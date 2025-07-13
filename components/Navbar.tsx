@@ -8,11 +8,12 @@ import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet"
 import { Badge } from "@/components/ui/badge"
 import { Menu, Phone, Mail, ShoppingCart, Search } from "lucide-react"
 import { cn } from "@/lib/utils"
+import { useQuoteCartStore } from "@/lib/store"
 
 const navigation = [
   { name: "หน้าแรก", href: "/" },
   { name: "สินค้า", href: "/products" },
-  { name: "ขอใบเสนอราคา", href: "/order" },
+  { name: "ขอใบเสนอราคา", href: "/quote" },
   { name: "เกี่ยวกับเรา", href: "/about" },
   { name: "ติดต่อ", href: "/contact" },
 ]
@@ -21,6 +22,7 @@ export function Navbar() {
   const [isScrolled, setIsScrolled] = useState(false)
   const [isOpen, setIsOpen] = useState(false)
   const pathname = usePathname()
+  const { items } = useQuoteCartStore()
 
   useEffect(() => {
     const handleScroll = () => {
@@ -96,11 +98,18 @@ export function Navbar() {
               <Button variant="ghost" size="sm" className="hidden sm:flex">
                 <Search className="w-4 h-4" />
               </Button>
-              <Button variant="ghost" size="sm" className="hidden sm:flex">
-                <ShoppingCart className="w-4 h-4" />
+              <Button variant="ghost" size="sm" asChild className="hidden sm:flex relative">
+                <Link href="/cart">
+                  <ShoppingCart className="w-4 h-4" />
+                  {items.length > 0 && (
+                    <span className="absolute -top-2 -right-2 bg-red-600 text-white rounded-full text-xs w-5 h-5 flex items-center justify-center">
+                      {items.length}
+                    </span>
+                  )}
+                </Link>
               </Button>
               <Button asChild size="sm" className="hidden sm:flex bg-blue-600 hover:bg-blue-700">
-                <Link href="/order">ขอใบเสนอราคา</Link>
+                <Link href="/quote">ขอใบเสนอราคา</Link>
               </Button>
 
               {/* Mobile Menu */}
@@ -127,7 +136,7 @@ export function Navbar() {
                     ))}
                     <div className="pt-4 border-t">
                       <Button asChild className="w-full bg-blue-600 hover:bg-blue-700">
-                        <Link href="/order" onClick={() => setIsOpen(false)}>
+                        <Link href="/quote" onClick={() => setIsOpen(false)}>
                           ขอใบเสนอราคา
                         </Link>
                       </Button>

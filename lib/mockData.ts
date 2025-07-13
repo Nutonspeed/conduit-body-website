@@ -533,3 +533,82 @@ export const mockLeads: Lead[] = [
     createdAt: "2024-01-18T16:30:00Z",
   },
 ]
+
+export interface QuoteItem {
+  productId: string
+  productName: string
+  size: string
+  quantity: number
+  price: number
+}
+
+export interface QuoteRequest {
+  id: string
+  name: string
+  phone: string
+  message: string
+  items: QuoteItem[]
+  status: "ใหม่" | "กำลังตอบ" | "ปิดการขาย"
+  createdAt: string
+}
+
+export const mockQuotes: QuoteRequest[] = [
+  {
+    id: "1",
+    name: "คุณสมชาย วิศวกร",
+    phone: "081-234-5678",
+    message: "ต้องการใบเสนอราคาด่วน",
+    items: [
+      {
+        productId: "3",
+        productName: "Conduit Bodies - Type C Standard",
+        size: "1/2",
+        quantity: 10,
+        price: 380,
+      },
+      {
+        productId: "5",
+        productName: "Conduit Bodies - Type LB Premium",
+        size: "1",
+        quantity: 5,
+        price: 640,
+      },
+    ],
+    status: "ใหม่",
+    createdAt: "2024-02-01T10:00:00Z",
+  },
+  {
+    id: "2",
+    name: "คุณนิรันดร์ ช่างไฟ",
+    phone: "082-345-6789",
+    message: "สอบถามราคาและระยะเวลาจัดส่ง",
+    items: [
+      {
+        productId: "1",
+        productName: "Conduit Bodies - Explosion-Proof Type C",
+        size: "3/4",
+        quantity: 20,
+        price: 1250,
+      },
+    ],
+    status: "กำลังตอบ",
+    createdAt: "2024-02-02T12:30:00Z",
+  },
+  {
+    id: "3",
+    name: "คุณวิชัย ผู้จัดการ",
+    phone: "083-456-7890",
+    message: "สั่งซื้อจำนวนมาก",
+    items: [
+      {
+        productId: "4",
+        productName: "Conduit Bodies - Type C Heavy Duty",
+        size: "1",
+        quantity: 50,
+        price: 320,
+      },
+    ],
+    status: "ปิดการขาย",
+    createdAt: "2024-02-03T09:15:00Z",
+  },
+]

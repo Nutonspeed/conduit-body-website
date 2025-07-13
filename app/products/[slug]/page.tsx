@@ -10,6 +10,7 @@ import { Separator } from "@/components/ui/separator"
 import { CheckCircle, Shield, Award } from "lucide-react"
 import { products } from "@/lib/mockData"
 import { useEffect } from "react"
+import { useQuoteCartStore } from "@/lib/store"
 // Add Facebook Pixel tracking for product views
 // import { fbPixelTrack } from "@/components/FacebookPixel" // TODO implement
 
@@ -21,6 +22,7 @@ interface ProductPageProps {
 
 export default function ProductPage({ params }: ProductPageProps) {
   const product = products.find((p) => p.slug === params.slug)
+  const { addItem } = useQuoteCartStore()
 
   if (!product) {
     notFound()
@@ -110,8 +112,20 @@ export default function ProductPage({ params }: ProductPageProps) {
             </div>
 
             <div className="flex flex-col sm:flex-row gap-4">
-              <Button asChild size="lg" className="flex-1">
-                <Link href={`/order?product=${product.slug}`}>ขอใบเสนอราคา</Link>
+              <Button
+                size="lg"
+                className="flex-1"
+                onClick={() =>
+                  addItem({
+                    productId: product.id,
+                    productName: product.name,
+                    size: product.sizes[0],
+                    quantity: 1,
+                    price: product.basePrice,
+                  })
+                }
+              >
+                เพิ่มลงคำขอ
               </Button>
               <Button asChild variant="outline" size="lg">
                 <Link href="tel:0-2925-9633">โทรสอบถาม</Link>

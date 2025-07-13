@@ -1,7 +1,7 @@
 import { create } from "zustand"
 import { persist } from "zustand/middleware"
-import type { Product, Lead } from "./mockData"
-import { products as initialProducts, mockLeads } from "./mockData"
+import type { Product, Lead, QuoteRequest, QuoteItem } from "./mockData"
+import { products as initialProducts, mockLeads, mockQuotes } from "./mockData"
 
 // Auth Store
 interface AuthState {
@@ -136,5 +136,92 @@ export const useMarketingStore = create<MarketingState>()(
     {
       name: "marketing-storage",
     },
+  ),
+)
+
+// Quote Cart Store
+interface CartItem extends QuoteItem {}
+
+interface QuoteCartState {
+  items: CartItem[]
+  addItem: (item: CartItem) => void
+  updateQuantity: (productId: string, size: string, quantity: number) => void
+  removeItem: (productId: string, size: string) => void
+  clearCart: () => void
+}
+
+export const useQuoteCartStore = create<QuoteCartState>()(
+  persist(
+    (set) => ({
+      items: [],
+      addItem: (item) =>
+        set((state) => {
+          const existing = state.items.find(
+            (i) => i.productId === item.productId && i.size === item.size,
+          )
+          if (existing) {
+            return {
+              items: state.items.map((i) =>
+                i.productId === item.productId && i.size === item.size
+                  ? { ...i, quantity: i.quantity + item.quantity }
+                  : i,
+              ),
+            }
+          }
+          return { items: [...state.items, item] }
+        }),
+      updateQuantity: (productId, size, quantity) =>
+        set((state) => ({
+          items: state.items.map((i) =>
+            i.productId === productId && i.size === size
+              ? { ...i, quantity }
+              : i,
+          ),
+        })),
+      removeItem: (productId, size) =>
+        set((state) => ({
+          items: state.items.filter(
+            (i) => !(i.productId === productId && i.size === size),
+          ),
+        })),
+      clearCart: () => set({ items: [] }),
+    }),
+    { name: "quote-cart-storage" },
+  ),
+)
+
+// Quote Store
+interface QuoteState {
+  quotes: QuoteRequest[]
+  addQuote: (
+    quote: Omit<QuoteRequest, "id" | "createdAt" | "status">
+  ) => void
+  updateStatus: (id: string, status: QuoteRequest["status"]) => void
+}
+
+export const useQuoteStore = create<QuoteState>()(
+  persist(
+    (set) => ({
+      quotes: mockQuotes,
+      addQuote: (quote) =>
+        set((state) => ({
+          quotes: [
+            {
+              ...quote,
+              id: Date.now().toString(),
+              status: "ใหม่",
+              createdAt: new Date().toISOString(),
+            },
+            ...state.quotes,
+          ],
+        })),
+      updateStatus: (id, status) =>
+        set((state) => ({
+          quotes: state.quotes.map((q) =>
+            q.id === id ? { ...q, status } : q,
+          ),
+        })),
+    }),
+    { name: "quote-storage" },
   ),
 )
