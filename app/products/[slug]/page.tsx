@@ -11,7 +11,7 @@ import { CheckCircle, Shield, Award } from "lucide-react"
 import { products } from "@/lib/mockData"
 import { useEffect } from "react"
 // Add Facebook Pixel tracking for product views
-import { fbPixelTrack } from "@/components/FacebookPixel"
+// import { fbPixelTrack } from "@/components/FacebookPixel" // TODO implement
 
 interface ProductPageProps {
   params: {
@@ -29,7 +29,7 @@ export default function ProductPage({ params }: ProductPageProps) {
   // Add useEffect to track product views:
   useEffect(() => {
     if (product) {
-      fbPixelTrack.viewContent(product.name, product.basePrice)
+      // fbPixelTrack.viewContent(product.name, product.basePrice)
     }
   }, [product])
 
