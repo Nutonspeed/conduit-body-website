@@ -612,3 +612,15 @@ export const mockQuotes: QuoteRequest[] = [
     createdAt: "2024-02-03T09:15:00Z",
   },
 ]
+
+export interface Customer {
+  id: string
+  name: string
+  phone: string
+  from: "lead" | "quote"
+  joinedAt: string
+  contactCount: number
+}
+
+export const mockCustomers: Customer[] = []
+
