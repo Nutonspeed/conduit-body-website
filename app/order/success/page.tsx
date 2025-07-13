@@ -22,7 +22,7 @@ export default function OrderSuccessPage() {
                 <CheckCircle className="w-8 h-8 text-green-600" />
               </div>
               <CardTitle className="text-2xl lg:text-3xl font-bold text-slate-900 font-sarabun">
-                ส่งคำสั่งซื้อเรียบร้อยแล้ว!
+                ส่งคำขอใบเสนอราคาเรียบร้อยแล้ว!
               </CardTitle>
               <CardDescription className="text-lg font-sarabun">
                 ขอบคุณสำหรับความไว้วางใจ เราจะติดต่อกลับเพื่อยืนยันรายละเอียดโดยเร็วที่สุด
@@ -59,7 +59,7 @@ export default function OrderSuccessPage() {
                   <CardContent className="p-4 text-center">
                     <Phone className="w-8 h-8 text-blue-600 mx-auto mb-2" />
                     <h4 className="font-semibold mb-1 font-sarabun">โทรสอบถาม</h4>
-                    <p className="text-sm text-gray-600 mb-2 font-sarabun">สอบถามสถานะคำสั่งซื้อ</p>
+                    <p className="text-sm text-gray-600 mb-2 font-sarabun">สอบถามสถานะคำขอใบเสนอราคา</p>
                     <Button asChild variant="outline" size="sm">
                       <Link href="tel:0-2925-9633">0-2925-9633</Link>
                     </Button>

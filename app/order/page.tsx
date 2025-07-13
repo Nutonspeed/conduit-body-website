@@ -96,7 +96,7 @@ export default function OrderPage() {
     console.log("Order submitted:", orderData)
 
     // Simulate order processing
-    alert("ขอบคุณสำหรับคำสั่งซื้อ เราจะติดต่อกลับเพื่อยืนยันรายละเอียดโดยเร็วที่สุด")
+    alert("ขอบคุณสำหรับคำขอใบเสนอราคา เราจะติดต่อกลับเพื่อยืนยันรายละเอียดโดยเร็วที่สุด")
 
     // Reset form
     setCartItems([])
@@ -114,7 +114,7 @@ export default function OrderPage() {
     <div className="min-h-screen py-8 bg-gray-50">
       <div className="container mx-auto px-4">
         <div className="mb-8">
-          <h1 className="text-3xl lg:text-4xl font-bold text-slate-900 mb-4 font-sarabun">สั่งซื้อสินค้า</h1>
+          <h1 className="text-3xl lg:text-4xl font-bold text-slate-900 mb-4 font-sarabun">ขอใบเสนอราคาสินค้า</h1>
           <p className="text-lg text-gray-600 font-sarabun">กรอกข้อมูลและเลือกสินค้าที่ต้องการ</p>
         </div>
 
@@ -311,7 +311,7 @@ export default function OrderPage() {
                   </div>
 
                   <Button type="submit" className="w-full" size="lg">
-                    ส่งคำสั่งซื้อ
+                    ส่งคำขอใบเสนอราคา
                   </Button>
                 </form>
               </CardContent>

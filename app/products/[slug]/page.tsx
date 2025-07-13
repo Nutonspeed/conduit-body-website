@@ -111,7 +111,7 @@ export default function ProductPage({ params }: ProductPageProps) {
 
             <div className="flex flex-col sm:flex-row gap-4">
               <Button asChild size="lg" className="flex-1">
-                <Link href={`/order?product=${product.slug}`}>สั่งซื้อ / ขอใบเสนอราคา</Link>
+                <Link href={`/order?product=${product.slug}`}>ขอใบเสนอราคา</Link>
               </Button>
               <Button asChild variant="outline" size="lg">
                 <Link href="tel:0-2925-9633">โทรสอบถาม</Link>

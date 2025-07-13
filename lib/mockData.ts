@@ -476,7 +476,7 @@ export const mockLeads: Lead[] = [
     productInterest: "Conduit Bodies - Type LB Premium",
     size: "1",
     quantity: 50,
-    notes: ["ลูกค้าสนใจสั่งซื้อจำนวนมาก", "ขอใบเสนอราคาพิเศษ"],
+    notes: ["ลูกค้าสนใจขอใบเสนอราคาจำนวนมาก", "ขอใบเสนอราคาพิเศษ"],
     status: "กำลังเจรจา",
     createdAt: "2024-01-15T10:30:00Z",
   },
