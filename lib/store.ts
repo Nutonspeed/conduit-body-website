@@ -131,16 +131,15 @@ export const useLeadStore = create<LeadState>()(
     (set) => ({
       leads: mockLeads,
       addLead: (lead) =>
-        set((state) => ({
-          leads: [
-            {
-              ...lead,
-              id: Date.now().toString(),
-              createdAt: new Date().toISOString(),
-            },
-            ...state.leads,
-          ],
-        })),
+        set((state) => {
+          const newLead: Lead = {
+            ...lead,
+            id: Date.now().toString(),
+            createdAt: new Date().toISOString(),
+          }
+          mockLeads.unshift(newLead)
+          return { leads: [newLead, ...state.leads] }
+        }),
       updateLead: (id, updatedLead) =>
         set((state) => ({
           leads: state.leads.map((lead) => (lead.id === id ? { ...lead, ...updatedLead } : lead)),
@@ -281,17 +280,16 @@ export const useQuoteStore = create<QuoteState>()(
     (set) => ({
       quotes: mockQuotes,
       addQuote: (quote) =>
-        set((state) => ({
-          quotes: [
-            {
-              ...quote,
-              id: Date.now().toString(),
-              status: "ใหม่",
-              createdAt: new Date().toISOString(),
-            },
-            ...state.quotes,
-          ],
-        })),
+        set((state) => {
+          const newQuote: QuoteRequest = {
+            ...quote,
+            id: Date.now().toString(),
+            status: "ใหม่" as QuoteRequest["status"],
+            createdAt: new Date().toISOString(),
+          }
+          mockQuotes.unshift(newQuote)
+          return { quotes: [newQuote, ...state.quotes] }
+        }),
       updateStatus: (id, status) =>
         set((state) => {
           const updated = state.quotes.map((q) =>

@@ -14,6 +14,8 @@ import { Search, Phone, Mail, MapPin, CheckCircle, Shield, Award, Users, Clock, 
 import { products } from "@/lib/mockData"
 import { AnimatedCounter, FadeInSection, SlideInSection } from "@/components/AnimatedComponents"
 import { useToast } from "@/hooks/use-toast"
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip"
+import FloatingContact from "@/components/FloatingContact"
 
 export default function HomePage() {
   const [searchTerm, setSearchTerm] = useState("")
@@ -337,6 +339,30 @@ export default function HomePage() {
           </div>
         </div>
       </section>
+      {/* Client Logos */}
+      <section className="py-16 bg-gray-50">
+        <div className="container mx-auto px-4">
+          <FadeInSection>
+            <div className="text-center mb-8">
+              <h2 className="text-3xl lg:text-4xl font-bold text-slate-900 mb-4 font-sarabun">ลูกค้าที่เคยใช้บริการ</h2>
+              <p className="text-lg text-gray-600 font-sarabun">ตัวอย่างลูกค้าบางส่วนที่ไว้วางใจเรา</p>
+            </div>
+          </FadeInSection>
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 items-center">
+            {[1,2,3,4,5,6].map((n) => (
+              <TooltipProvider key={n}>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <Image src="/placeholder-logo.png" alt={`Client ${n}`} width={150} height={80} className="mx-auto grayscale hover:grayscale-0 transition-all" />
+                  </TooltipTrigger>
+                  <TooltipContent className="font-sarabun">บริษัทตัวอย่าง {n}</TooltipContent>
+                </Tooltip>
+              </TooltipProvider>
+            ))}
+          </div>
+        </div>
+      </section>
+
 
       {/* Contact Section */}
       <section className="py-16 bg-blue-900 text-white">
@@ -455,6 +481,7 @@ export default function HomePage() {
           </div>
         </div>
       </section>
+    <FloatingContact />
     </div>
   )
 }

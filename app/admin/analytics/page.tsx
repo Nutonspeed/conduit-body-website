@@ -10,6 +10,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { XAxis, YAxis, CartesianGrid, ResponsiveContainer, PieChart, Pie, Cell, AreaChart, Area } from "recharts"
 import { ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart"
 import { Eye, Users, MousePointer, Clock, Activity } from "lucide-react"
+import { useLeadStore, useQuoteStore } from "@/lib/store"
 
 // Mock analytics data
 const realtimeData = {
@@ -78,6 +79,13 @@ export default function AdvancedAnalyticsPage() {
   const [selectedTimeRange, setSelectedTimeRange] = useState("7d")
   const [isRealtime, setIsRealtime] = useState(true)
 
+  const { leads } = useLeadStore();
+  const { quotes } = useQuoteStore();
+  const totalLeads = leads.length;
+  const totalQuotes = quotes.length;
+  const closedQuotes = quotes.filter(q => q.status === "ปิดการขาย").length;
+  const closeRate = totalQuotes ? Math.round((closedQuotes / totalQuotes) * 100) : 0;
+  const latestQuote = quotes[0];
   // Simulate real-time updates
   useEffect(() => {
     if (isRealtime) {
@@ -125,6 +133,32 @@ export default function AdvancedAnalyticsPage() {
             Real-time
           </Button>
         </div>
+      <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+        <Card>
+          <CardContent className="p-6">
+            <p className="text-sm text-gray-600">จำนวน Leads</p>
+            <p className="text-2xl font-bold">{totalLeads}</p>
+          </CardContent>
+        </Card>
+        <Card>
+          <CardContent className="p-6">
+            <p className="text-sm text-gray-600">จำนวน Quotes</p>
+            <p className="text-2xl font-bold">{totalQuotes}</p>
+          </CardContent>
+        </Card>
+        <Card>
+          <CardContent className="p-6">
+            <p className="text-sm text-gray-600">อัตราปิดการขาย</p>
+            <p className="text-2xl font-bold">{closeRate}%</p>
+          </CardContent>
+        </Card>
+        <Card>
+          <CardContent className="p-6">
+            <p className="text-sm text-gray-600">ล่าสุด</p>
+            <p className="text-sm">{latestQuote ? new Date(latestQuote.createdAt).toLocaleDateString("th-TH") : "-"}</p>
+          </CardContent>
+        </Card>
+      </div>
       </div>
 
       {/* Real-time Overview */}
