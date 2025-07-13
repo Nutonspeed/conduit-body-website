@@ -43,7 +43,7 @@ export const products: Product[] = [
     basePrice: 1250,
     slug: "conduit-bodies-explosion-proof-type-c",
     image:
-      "https://res.cloudinary.com/mcrey/image/upload/f_auto,q_auto/w_190/v1645510095/Products/EGSMC100ACG/IMG_49445199_IDW_IMAGE_2d77fde0c55a6c826fdb7d2e00104a29b4910f599013803c078c2dc743779ab3.jpg",
+      "https://res.cloudinary.com/mcrey/image/upload/f_auto,q_auto/w_190/v1645510095/Products/EGSMC100ACG/IMG_49445199_IDW_IMAGE_2d77fde0c55a6c826fdb7d2e00104a29b4910f599013803c078c2dc743779ab3.svg",
     category: "Explosion-Proof",
     subcategory: "Type C",
     features: ["ป้องกันการระเบิด", "ทนทานต่อสภาพแวดล้อมรุนแรง", "วัสดุอลูมิเนียมคุณภาพสูง"],
@@ -60,7 +60,7 @@ export const products: Product[] = [
     basePrice: 1350,
     slug: "conduit-bodies-explosion-proof-type-lb",
     image:
-      "https://res.cloudinary.com/mcrey/image/upload/f_auto,q_auto/w_190/v1645510095/Products/EGSMC100ACG/IMG_49445199_IDW_IMAGE_2d77fde0c55a6c826fdb7d2e00104a29b4910f599013803c078c2dc743779ab3.jpg",
+      "https://res.cloudinary.com/mcrey/image/upload/f_auto,q_auto/w_190/v1645510095/Products/EGSMC100ACG/IMG_49445199_IDW_IMAGE_2d77fde0c55a6c826fdb7d2e00104a29b4910f599013803c078c2dc743779ab3.svg",
     category: "Explosion-Proof",
     subcategory: "Type LB",
     features: ["ป้องกันการระเบิด", "เปลี่ยนทิศทางได้", "ทนทานสูง"],
@@ -79,7 +79,7 @@ export const products: Product[] = [
     basePrice: 380,
     slug: "conduit-bodies-type-c-standard",
     image:
-      "https://res.cloudinary.com/mcrey/image/upload/f_auto,q_auto/w_190/v1645511625/Products/EGSMC100/IMG_49444383_IDW_IMAGE_512ab2473abe920fef83da8864935dda2a610bccc610e480e963402e27a51d18.jpg",
+      "https://res.cloudinary.com/mcrey/image/upload/f_auto,q_auto/w_190/v1645511625/Products/EGSMC100/IMG_49444383_IDW_IMAGE_512ab2473abe920fef83da8864935dda2a610bccc610e480e963402e27a51d18.svg",
     category: "Standard",
     subcategory: "Type C",
     features: ["เชื่อมต่อแบบตรง", "ติดตั้งง่าย", "วัสดุอลูมิเนียม"],
@@ -96,7 +96,7 @@ export const products: Product[] = [
     basePrice: 320,
     slug: "conduit-bodies-type-c-heavy-duty",
     image:
-      "https://res.cloudinary.com/mcrey/image/upload/f_auto,q_auto/w_190/v1645511625/Products/EGSMC100/IMG_49444383_IDW_IMAGE_512ab2473abe920fef83da8864935dda2a610bccc610e480e963402e27a51d18.jpg",
+      "https://res.cloudinary.com/mcrey/image/upload/f_auto,q_auto/w_190/v1645511625/Products/EGSMC100/IMG_49444383_IDW_IMAGE_512ab2473abe920fef83da8864935dda2a610bccc610e480e963402e27a51d18.svg",
     category: "Heavy Duty",
     subcategory: "Type C",
     features: ["วัสดุเหล็ก", "ทนทานพิเศษ", "ราคาประหยัด"],
@@ -115,7 +115,7 @@ export const products: Product[] = [
     basePrice: 450,
     slug: "conduit-bodies-type-lb-premium",
     image:
-      "https://res.cloudinary.com/mcrey/image/upload/f_auto,q_auto/w_190/v1645510069/Products/EGSMLB100/IMG_49446327_IDW_IMAGE_aa8a4665eaff920149934aa899ec1ec11d1b2d44cf0cd451a22cdb3e2eea59cf.jpg",
+      "https://res.cloudinary.com/mcrey/image/upload/f_auto,q_auto/w_190/v1645510069/Products/EGSMLB100/IMG_49446327_IDW_IMAGE_aa8a4665eaff920149934aa899ec1ec11d1b2d44cf0cd451a22cdb3e2eea59cf.svg",
     category: "Premium",
     subcategory: "Type LB",
     features: ["เปลี่ยนทิศทาง 90 องศา", "ฝาเปิดได้", "วัสดุอลูมิเนียมคุณภาพสูง"],
@@ -132,7 +132,7 @@ export const products: Product[] = [
     basePrice: 350,
     slug: "conduit-bodies-type-lb-standard",
     image:
-      "https://res.cloudinary.com/mcrey/image/upload/f_auto,q_auto/w_190/v1645510069/Products/EGSMLB100/IMG_49446327_IDW_IMAGE_aa8a4665eaff920149934aa899ec1ec11d1b2d44cf0cd451a22cdb3e2eea59cf.jpg",
+      "https://res.cloudinary.com/mcrey/image/upload/f_auto,q_auto/w_190/v1645510069/Products/EGSMLB100/IMG_49446327_IDW_IMAGE_aa8a4665eaff920149934aa899ec1ec11d1b2d44cf0cd451a22cdb3e2eea59cf.svg",
     category: "Standard",
     subcategory: "Type LB",
     features: ["เปลี่ยนทิศทาง 90 องศา", "วัสดุเหล็ก", "ราคาประหยัด"],
@@ -151,7 +151,7 @@ export const products: Product[] = [
     basePrice: 480,
     slug: "conduit-bodies-type-ll-premium",
     image:
-      "https://res.cloudinary.com/mcrey/image/upload/f_auto,q_auto/w_190/v1645510044/Products/EGSMLL100/IMG_49446444_IDW_IMAGE_9ba1e9a2da872b3cb2446bf7f4cb7270fdfac9748e174bc4a9edb7f83c9c1e82.jpg",
+      "https://res.cloudinary.com/mcrey/image/upload/f_auto,q_auto/w_190/v1645510044/Products/EGSMLL100/IMG_49446444_IDW_IMAGE_9ba1e9a2da872b3cb2446bf7f4cb7270fdfac9748e174bc4a9edb7f83c9c1e82.svg",
     category: "Premium",
     subcategory: "Type LL",
     features: ["เปลี่ยนทิศทางแบบโค้ง", "ลดการสูญเสียสัญญาณ", "ติดตั้งง่าย"],
@@ -168,7 +168,7 @@ export const products: Product[] = [
     basePrice: 380,
     slug: "conduit-bodies-type-ll-standard",
     image:
-      "https://res.cloudinary.com/mcrey/image/upload/f_auto,q_auto/w_190/v1645510044/Products/EGSMLL100/IMG_49446444_IDW_IMAGE_9ba1e9a2da872b3cb2446bf7f4cb7270fdfac9748e174bc4a9edb7f83c9c1e82.jpg",
+      "https://res.cloudinary.com/mcrey/image/upload/f_auto,q_auto/w_190/v1645510044/Products/EGSMLL100/IMG_49446444_IDW_IMAGE_9ba1e9a2da872b3cb2446bf7f4cb7270fdfac9748e174bc4a9edb7f83c9c1e82.svg",
     category: "Standard",
     subcategory: "Type LL",
     features: ["เปลี่ยนทิศทางแบบโค้ง", "วัสดุเหล็ก", "ราคาเหมาะสม"],
@@ -187,7 +187,7 @@ export const products: Product[] = [
     basePrice: 480,
     slug: "conduit-bodies-type-lr-premium",
     image:
-      "https://res.cloudinary.com/mcrey/image/upload/f_auto,q_auto/w_190/v1645510916/Products/EGSMLR100/IMG_49446479_IDW_IMAGE_982d9b8f3dbe033b918fc068c45edf926ef12a3f7b62974e8d43fa25c0bbaff1.jpg",
+      "https://res.cloudinary.com/mcrey/image/upload/f_auto,q_auto/w_190/v1645510916/Products/EGSMLR100/IMG_49446479_IDW_IMAGE_982d9b8f3dbe033b918fc068c45edf926ef12a3f7b62974e8d43fa25c0bbaff1.svg",
     category: "Premium",
     subcategory: "Type LR",
     features: ["เปลี่ยนทิศทางไปทางขวา", "ฝาเปิดได้", "วัสดุอลูมิเนียมคุณภาพสูง"],
@@ -204,7 +204,7 @@ export const products: Product[] = [
     basePrice: 380,
     slug: "conduit-bodies-type-lr-standard",
     image:
-      "https://res.cloudinary.com/mcrey/image/upload/f_auto,q_auto/w_190/v1645510916/Products/EGSMLR100/IMG_49446479_IDW_IMAGE_982d9b8f3dbe033b918fc068c45edf926ef12a3f7b62974e8d43fa25c0bbaff1.jpg",
+      "https://res.cloudinary.com/mcrey/image/upload/f_auto,q_auto/w_190/v1645510916/Products/EGSMLR100/IMG_49446479_IDW_IMAGE_982d9b8f3dbe033b918fc068c45edf926ef12a3f7b62974e8d43fa25c0bbaff1.svg",
     category: "Standard",
     subcategory: "Type LR",
     features: ["เปลี่ยนทิศทางไปทางขวา", "วัสดุเหล็ก", "ราคาประหยัด"],
@@ -223,7 +223,7 @@ export const products: Product[] = [
     basePrice: 520,
     slug: "conduit-bodies-type-t-premium",
     image:
-      "https://res.cloudinary.com/mcrey/image/upload/f_auto,q_auto/w_190/v1718688021/Products/EGSMOZGT27/IMG_54630238_Z_Gedney_T17.jpg",
+      "https://res.cloudinary.com/mcrey/image/upload/f_auto,q_auto/w_190/v1718688021/Products/EGSMOZGT27/IMG_54630238_Z_Gedney_T17.svg",
     category: "Premium",
     subcategory: "Type T",
     features: ["แยกสายไฟ 3 ทิศทาง", "ฝาเปิดได้", "วัสดุอลูมิเนียมคุณภาพสูง"],
@@ -240,7 +240,7 @@ export const products: Product[] = [
     basePrice: 420,
     slug: "conduit-bodies-type-t-standard",
     image:
-      "https://res.cloudinary.com/mcrey/image/upload/f_auto,q_auto/w_190/v1718688021/Products/EGSMOZGT27/IMG_54630238_Z_Gedney_T17.jpg",
+      "https://res.cloudinary.com/mcrey/image/upload/f_auto,q_auto/w_190/v1718688021/Products/EGSMOZGT27/IMG_54630238_Z_Gedney_T17.svg",
     category: "Standard",
     subcategory: "Type T",
     features: ["แยกสายไฟ 3 ทิศทาง", "วัสดุเหล็ก", "ราคาเหมาะสม"],
@@ -259,7 +259,7 @@ export const products: Product[] = [
     basePrice: 580,
     slug: "conduit-bodies-type-tb-premium",
     image:
-      "https://res.cloudinary.com/mcrey/image/upload/f_auto,q_auto/w_190/v1645511545/Products/EGSMTB100/IMG_49447163_IDW_IMAGE_f93320ac7280ea0110a9f9e64e437104d4ca2ff7a2bdc8417fb9d673787e45e9.jpg",
+      "https://res.cloudinary.com/mcrey/image/upload/f_auto,q_auto/w_190/v1645511545/Products/EGSMTB100/IMG_49447163_IDW_IMAGE_f93320ac7280ea0110a9f9e64e437104d4ca2ff7a2bdc8417fb9d673787e45e9.svg",
     category: "Premium",
     subcategory: "Type TB",
     features: ["งานพิเศษ", "ใช้งานหลากหลาย", "วัสดุอลูมิเนียมคุณภาพสูง"],
@@ -276,7 +276,7 @@ export const products: Product[] = [
     basePrice: 480,
     slug: "conduit-bodies-type-tb-standard",
     image:
-      "https://res.cloudinary.com/mcrey/image/upload/f_auto,q_auto/w_190/v1645511545/Products/EGSMTB100/IMG_49447163_IDW_IMAGE_f93320ac7280ea0110a9f9e64e437104d4ca2ff7a2bdc8417fb9d673787e45e9.jpg",
+      "https://res.cloudinary.com/mcrey/image/upload/f_auto,q_auto/w_190/v1645511545/Products/EGSMTB100/IMG_49447163_IDW_IMAGE_f93320ac7280ea0110a9f9e64e437104d4ca2ff7a2bdc8417fb9d673787e45e9.svg",
     category: "Standard",
     subcategory: "Type TB",
     features: ["งานพิเศษ", "วัสดุเหล็ก", "ราคาเหมาะสม"],
@@ -295,7 +295,7 @@ export const products: Product[] = [
     basePrice: 620,
     slug: "conduit-bodies-type-ub-premium",
     image:
-      "https://res.cloudinary.com/mcrey/image/upload/f_auto,q_auto/w_190/v1645510958/Products/EGSMUB6X125M/IMG_49447788_O_Z_Gedney_C8X_125MG.jpg",
+      "https://res.cloudinary.com/mcrey/image/upload/f_auto,q_auto/w_190/v1645510958/Products/EGSMUB6X125M/IMG_49447788_O_Z_Gedney_C8X_125MG.svg",
     category: "Premium",
     subcategory: "Type UB",
     features: ["การใช้งานเฉพาะทาง", "ทนทานสูง", "วัสดุอลูมิเนียมคุณภาพสูง"],
@@ -312,7 +312,7 @@ export const products: Product[] = [
     basePrice: 520,
     slug: "conduit-bodies-type-ub-standard",
     image:
-      "https://res.cloudinary.com/mcrey/image/upload/f_auto,q_auto/w_190/v1645510958/Products/EGSMUB6X125M/IMG_49447788_O_Z_Gedney_C8X_125MG.jpg",
+      "https://res.cloudinary.com/mcrey/image/upload/f_auto,q_auto/w_190/v1645510958/Products/EGSMUB6X125M/IMG_49447788_O_Z_Gedney_C8X_125MG.svg",
     category: "Standard",
     subcategory: "Type UB",
     features: ["การใช้งานเฉพาะทาง", "วัสดุเหล็ก", "ราคาเหมาะสม"],
@@ -331,7 +331,7 @@ export const products: Product[] = [
     basePrice: 750,
     slug: "conduit-bodies-type-x-premium",
     image:
-      "https://res.cloudinary.com/mcrey/image/upload/f_auto,q_auto/w_190/v1645511612/Products/EGSMX100/IMG_49447809_IDW_IMAGE_f73729d3bc6cc9baf8c0cfd4720658f5736c9d3bfc21750fb0570c9a4a9dbc98.jpg",
+      "https://res.cloudinary.com/mcrey/image/upload/f_auto,q_auto/w_190/v1645511612/Products/EGSMX100/IMG_49447809_IDW_IMAGE_f73729d3bc6cc9baf8c0cfd4720658f5736c9d3bfc21750fb0570c9a4a9dbc98.svg",
     category: "Premium",
     subcategory: "Type X",
     features: ["เชื่อมต่อแบบไขว้ 4 ทิศทาง", "งานซับซ้อน", "วัสดุอลูมิเนียมคุณภาพสูง"],
@@ -348,7 +348,7 @@ export const products: Product[] = [
     basePrice: 650,
     slug: "conduit-bodies-type-x-standard",
     image:
-      "https://res.cloudinary.com/mcrey/image/upload/f_auto,q_auto/w_190/v1645511612/Products/EGSMX100/IMG_49447809_IDW_IMAGE_f73729d3bc6cc9baf8c0cfd4720658f5736c9d3bfc21750fb0570c9a4a9dbc98.jpg",
+      "https://res.cloudinary.com/mcrey/image/upload/f_auto,q_auto/w_190/v1645511612/Products/EGSMX100/IMG_49447809_IDW_IMAGE_f73729d3bc6cc9baf8c0cfd4720658f5736c9d3bfc21750fb0570c9a4a9dbc98.svg",
     category: "Standard",
     subcategory: "Type X",
     features: ["เชื่อมต่อแบบไขว้ 4 ทิศทาง", "วัสดุเหล็ก", "ราคาเหมาะสม"],
@@ -367,7 +367,7 @@ export const products: Product[] = [
     basePrice: 150,
     slug: "conduit-body-covers-premium",
     image:
-      "https://res.cloudinary.com/mcrey/image/upload/f_auto,q_auto/w_190/v1645511426/Products/EGSMBC100G/IMG_49444958_IDW_IMAGE_2d59c8962b7988491f6ada1278c6721564f10aee3b060bac87d329da5b5b37d5.jpg",
+      "https://res.cloudinary.com/mcrey/image/upload/f_auto,q_auto/w_190/v1645511426/Products/EGSMBC100G/IMG_49444958_IDW_IMAGE_2d59c8962b7988491f6ada1278c6721564f10aee3b060bac87d329da5b5b37d5.svg",
     category: "Accessories",
     subcategory: "Covers",
     features: ["ป้องกันฝุ่นและความชื้น", "เปิดปิดง่าย", "วัสดุอลูมิเนียม"],
@@ -384,7 +384,7 @@ export const products: Product[] = [
     basePrice: 120,
     slug: "conduit-body-covers-standard",
     image:
-      "https://res.cloudinary.com/mcrey/image/upload/f_auto,q_auto/w_190/v1645511426/Products/EGSMBC100G/IMG_49444958_IDW_IMAGE_2d59c8962b7988491f6ada1278c6721564f10aee3b060bac87d329da5b5b37d5.jpg",
+      "https://res.cloudinary.com/mcrey/image/upload/f_auto,q_auto/w_190/v1645511426/Products/EGSMBC100G/IMG_49444958_IDW_IMAGE_2d59c8962b7988491f6ada1278c6721564f10aee3b060bac87d329da5b5b37d5.svg",
     category: "Accessories",
     subcategory: "Covers",
     features: ["ป้องกันฝุ่นและความชื้น", "วัสดุเหล็ก", "ราคาประหยัด"],
@@ -403,7 +403,7 @@ export const products: Product[] = [
     basePrice: 80,
     slug: "conduit-body-gaskets-premium",
     image:
-      "https://res.cloudinary.com/mcrey/image/upload/f_auto,q_auto/w_190/v1717565811/Products/EGSMMGC300/IMG_49446459_O_Z_Gedney_MKG100A.jpg",
+      "https://res.cloudinary.com/mcrey/image/upload/f_auto,q_auto/w_190/v1717565811/Products/EGSMMGC300/IMG_49446459_O_Z_Gedney_MKG100A.svg",
     category: "Accessories",
     subcategory: "Gaskets",
     features: ["ป้องกันการรั่วซึม", "ทนทานต่อสภาพอากาศ", "ยางคุณภาพสูง"],
@@ -420,7 +420,7 @@ export const products: Product[] = [
     basePrice: 60,
     slug: "conduit-body-gaskets-standard",
     image:
-      "https://res.cloudinary.com/mcrey/image/upload/f_auto,q_auto/w_190/v1717565811/Products/EGSMMGC300/IMG_49446459_O_Z_Gedney_MKG100A.jpg",
+      "https://res.cloudinary.com/mcrey/image/upload/f_auto,q_auto/w_190/v1717565811/Products/EGSMMGC300/IMG_49446459_O_Z_Gedney_MKG100A.svg",
     category: "Accessories",
     subcategory: "Gaskets",
     features: ["ป้องกันการรั่วซึม", "ยางมาตรฐาน", "ราคาประหยัด"],
@@ -439,7 +439,7 @@ export const products: Product[] = [
     basePrice: 680,
     slug: "conduit-bodies-type-c-stainless-steel",
     image:
-      "https://res.cloudinary.com/mcrey/image/upload/f_auto,q_auto/w_190/v1645511625/Products/EGSMC100/IMG_49444383_IDW_IMAGE_512ab2473abe920fef83da8864935dda2a610bccc610e480e963402e27a51d18.jpg",
+      "https://res.cloudinary.com/mcrey/image/upload/f_auto,q_auto/w_190/v1645511625/Products/EGSMC100/IMG_49444383_IDW_IMAGE_512ab2473abe920fef83da8864935dda2a610bccc610e480e963402e27a51d18.svg",
     category: "Stainless Steel",
     subcategory: "Type C",
     features: ["ทนทานต่อการกัดกร่อน", "วัสดุสแตนเลส", "ใช้งานได้ยาวนาน"],
@@ -456,7 +456,7 @@ export const products: Product[] = [
     basePrice: 750,
     slug: "conduit-bodies-type-lb-stainless-steel",
     image:
-      "https://res.cloudinary.com/mcrey/image/upload/f_auto,q_auto/w_190/v1645510069/Products/EGSMLB100/IMG_49446327_IDW_IMAGE_aa8a4665eaff920149934aa899ec1ec11d1b2d44cf0cd451a22cdb3e2eea59cf.jpg",
+      "https://res.cloudinary.com/mcrey/image/upload/f_auto,q_auto/w_190/v1645510069/Products/EGSMLB100/IMG_49446327_IDW_IMAGE_aa8a4665eaff920149934aa899ec1ec11d1b2d44cf0cd451a22cdb3e2eea59cf.svg",
     category: "Stainless Steel",
     subcategory: "Type LB",
     features: ["ทนทานต่อการกัดกร่อน", "วัสดุสแตนเลส", "เปลี่ยนทิศทางได้"],

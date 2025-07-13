@@ -72,6 +72,13 @@ export default function HomePage() {
     <div className="min-h-screen">
       {/* Hero Section */}
       <section className="relative bg-gradient-to-br from-blue-900 via-blue-800 to-slate-900 text-white py-20 lg:py-32 overflow-hidden">
+        <Image
+          src="/mock/oz-hero.svg"
+          alt="O-Z/Gedney hero background"
+          fill
+          className="object-cover opacity-20"
+          priority
+        />
         <div className="absolute inset-0 bg-black/20"></div>
         <div className="container mx-auto px-4 relative z-10">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
@@ -203,7 +210,7 @@ export default function HomePage() {
                   <CardHeader className="p-4">
                     <div className="aspect-square bg-gray-100 rounded-lg mb-4 flex items-center justify-center overflow-hidden">
                       <Image
-                        src={product.image || "/placeholder.svg"}
+                        src={product.image || "/mock/product-placeholder.svg"}
                         alt={product.name}
                         width={200}
                         height={200}
