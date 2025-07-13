@@ -1,7 +1,12 @@
 import { create } from "zustand"
 import { persist } from "zustand/middleware"
-import type { Product, Lead, QuoteRequest, QuoteItem } from "./mockData"
-import { products as initialProducts, mockLeads, mockQuotes } from "./mockData"
+import type { Product, Lead, QuoteRequest, QuoteItem, Customer } from "./mockData"
+import {
+  products as initialProducts,
+  mockLeads,
+  mockQuotes,
+  mockCustomers,
+} from "./mockData"
 
 // Auth Store
 interface AuthState {
@@ -66,11 +71,50 @@ export const useProductStore = create<ProductState>()(
   ),
 )
 
+// Customer Store
+interface CustomerState {
+  customers: Customer[]
+  addCustomer: (
+    customer: Omit<Customer, "id" | "joinedAt" | "contactCount"> & {
+      contactCount?: number
+    }
+  ) => void
+}
+
+export const useCustomerStore = create<CustomerState>()(
+  persist(
+    (set) => ({
+      customers: mockCustomers,
+      addCustomer: (customer) =>
+        set((state) => {
+          const exists = state.customers.some(
+            (c) => c.phone === customer.phone && c.from === customer.from
+          )
+          if (exists) return { customers: state.customers }
+          return {
+            customers: [
+              {
+                ...customer,
+                id: Date.now().toString(),
+                joinedAt: new Date().toISOString(),
+                contactCount: customer.contactCount ?? 1,
+              },
+              ...state.customers,
+            ],
+          }
+        }),
+    }),
+    { name: "customer-storage" },
+  ),
+)
+
 // Lead Store
 interface LeadState {
   leads: Lead[]
   addLead: (lead: Omit<Lead, "id" | "createdAt">) => void
   updateLead: (id: string, lead: Partial<Lead>) => void
+  updateLeadStatus: (id: string, status: Lead["status"]) => void
+  addNote: (id: string, note: string) => void
   deleteLead: (id: string) => void
 }
 
@@ -92,6 +136,31 @@ export const useLeadStore = create<LeadState>()(
       updateLead: (id, updatedLead) =>
         set((state) => ({
           leads: state.leads.map((lead) => (lead.id === id ? { ...lead, ...updatedLead } : lead)),
+        })),
+      updateLeadStatus: (id, status) =>
+        set((state) => {
+          const updated = state.leads.map((lead) =>
+            lead.id === id ? { ...lead, status } : lead,
+          )
+          const lead = state.leads.find((l) => l.id === id)
+          if (status === "ปิดการขาย" && lead) {
+            const { addCustomer } = useCustomerStore.getState()
+            addCustomer({
+              name: lead.customerName,
+              phone: lead.phone,
+              from: "lead",
+              contactCount: lead.notes ? lead.notes.length : 1,
+            })
+          }
+          return { leads: updated }
+        }),
+      addNote: (id, note) =>
+        set((state) => ({
+          leads: state.leads.map((lead) =>
+            lead.id === id
+              ? { ...lead, notes: [...(lead.notes ?? []), note] }
+              : lead,
+          ),
         })),
       deleteLead: (id) =>
         set((state) => ({
@@ -216,11 +285,22 @@ export const useQuoteStore = create<QuoteState>()(
           ],
         })),
       updateStatus: (id, status) =>
-        set((state) => ({
-          quotes: state.quotes.map((q) =>
+        set((state) => {
+          const updated = state.quotes.map((q) =>
             q.id === id ? { ...q, status } : q,
-          ),
-        })),
+          )
+          const quote = state.quotes.find((q) => q.id === id)
+          if (status === "ปิดการขาย" && quote) {
+            const { addCustomer } = useCustomerStore.getState()
+            addCustomer({
+              name: quote.name,
+              phone: quote.phone,
+              from: "quote",
+              contactCount: 1,
+            })
+          }
+          return { quotes: updated }
+        }),
     }),
     { name: "quote-storage" },
   ),

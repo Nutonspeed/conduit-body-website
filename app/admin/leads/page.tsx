@@ -16,13 +16,15 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
-import { Eye, Download } from "lucide-react"
+import { Eye, Download, Trash2 } from "lucide-react"
 import { useAuthStore, useLeadStore } from "@/lib/store"
+import { useToast } from "@/hooks/use-toast"
 
 export default function AdminLeads() {
   const router = useRouter()
   const { isAuthenticated } = useAuthStore()
-  const { leads, updateLeadStatus, addNote } = useLeadStore()
+  const { leads, updateLeadStatus, addNote, deleteLead } = useLeadStore()
+  const { toast } = useToast()
 
   const [selectedLead, setSelectedLead] = useState<any>(null)
   const [isDetailOpen, setIsDetailOpen] = useState(false)
@@ -49,6 +51,13 @@ export default function AdminLeads() {
       // Update selected lead to show new note
       const updatedLead = leads.find((l) => l.id === selectedLead.id)
       setSelectedLead(updatedLead)
+    }
+  }
+
+  const handleDelete = (id: string) => {
+    if (confirm("ยืนยันการลบรายการนี้?")) {
+      deleteLead(id)
+      toast({ description: "ลบเรียบร้อยแล้ว" })
     }
   }
 
@@ -168,13 +177,14 @@ export default function AdminLeads() {
                       </Select>
                     </TableCell>
                     <TableCell>
-                      <Dialog>
-                        <DialogTrigger asChild>
-                          <Button size="sm" variant="outline" onClick={() => setSelectedLead(lead)}>
-                            <Eye className="w-4 h-4" />
-                          </Button>
-                        </DialogTrigger>
-                        <DialogContent className="max-w-2xl">
+                      <div className="flex gap-2">
+                        <Dialog>
+                          <DialogTrigger asChild>
+                            <Button size="sm" variant="outline" onClick={() => setSelectedLead(lead)}>
+                              <Eye className="w-4 h-4" />
+                            </Button>
+                          </DialogTrigger>
+                          <DialogContent className="max-w-2xl">
                           <DialogHeader>
                             <DialogTitle className="font-sarabun">รายละเอียด Lead</DialogTitle>
                             <DialogDescription className="font-sarabun">ข้อมูลลูกค้าและการติดตาม</DialogDescription>
@@ -255,8 +265,12 @@ export default function AdminLeads() {
                               </div>
                             </div>
                           )}
-                        </DialogContent>
-                      </Dialog>
+                          </DialogContent>
+                        </Dialog>
+                        <Button size="sm" variant="outline" onClick={() => handleDelete(lead.id)}>
+                          <Trash2 className="w-4 h-4" />
+                        </Button>
+                      </div>
                     </TableCell>
                   </TableRow>
                 ))}
