@@ -624,3 +624,14 @@ export interface Customer {
 
 export const mockCustomers: Customer[] = []
 
+export interface Invoice {
+  invoiceId: string
+  quoteId: string
+  customer: string
+  items: QuoteItem[]
+  amount: number
+  createdAt: string
+}
+
+export const mockInvoiceHistory: Invoice[] = []
+

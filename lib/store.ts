@@ -1,11 +1,19 @@
 import { create } from "zustand"
 import { persist } from "zustand/middleware"
-import type { Product, Lead, QuoteRequest, QuoteItem, Customer } from "./mockData"
+import type {
+  Product,
+  Lead,
+  QuoteRequest,
+  QuoteItem,
+  Customer,
+  Invoice,
+} from "./mockData"
 import {
   products as initialProducts,
   mockLeads,
   mockQuotes,
   mockCustomers,
+  mockInvoiceHistory,
 } from "./mockData"
 
 // Auth Store
@@ -303,5 +311,36 @@ export const useQuoteStore = create<QuoteState>()(
         }),
     }),
     { name: "quote-storage" },
+  ),
+)
+
+interface InvoiceState {
+  invoices: Invoice[]
+  createInvoiceFromQuote: (quote: QuoteRequest) => Invoice
+  getInvoiceForQuote: (quoteId: string) => Invoice | undefined
+}
+
+export const useInvoiceStore = create<InvoiceState>()(
+  persist(
+    (set, get) => ({
+      invoices: mockInvoiceHistory,
+      createInvoiceFromQuote: (quote) => {
+        const invoice: Invoice = {
+          invoiceId: `INV-${Date.now().toString().slice(-5)}`,
+          quoteId: quote.id,
+          customer: quote.name,
+          items: quote.items,
+          amount: quote.items.reduce(
+            (sum, item) => sum + item.price * item.quantity,
+            0,
+          ),
+          createdAt: new Date().toISOString(),
+        }
+        set((state) => ({ invoices: [invoice, ...state.invoices] }))
+        return invoice
+      },
+      getInvoiceForQuote: (id) => get().invoices.find((inv) => inv.quoteId === id),
+    }),
+    { name: "invoice-storage" },
   ),
 )
