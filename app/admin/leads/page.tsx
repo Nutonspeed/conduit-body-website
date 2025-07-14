@@ -159,7 +159,7 @@ export default function AdminLeads() {
                         <div>{lead.productInterest}</div>
                         {lead.size && (
                           <div className="text-sm text-gray-500">
-                            ขนาด: {lead.size}" จำนวน: {lead.quantity}
+                            ขนาด: {lead.size}&quot; จำนวน: {lead.quantity}
                           </div>
                         )}
                       </div>

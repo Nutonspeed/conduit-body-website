@@ -44,7 +44,7 @@ export default function QuotePage() {
               {items.map((item) => (
                 <div key={`${item.productId}-${item.size}`} className="flex justify-between">
                   <div className="font-sarabun">
-                    {item.productName} ({item.size}") × {item.quantity}
+                    {item.productName} ({item.size}&quot;) × {item.quantity}
                   </div>
                   <div>฿{(item.price * item.quantity).toLocaleString()}</div>
                 </div>

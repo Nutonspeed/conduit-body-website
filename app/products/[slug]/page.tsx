@@ -87,7 +87,7 @@ export default function ProductPage({ params }: ProductPageProps) {
                 <div className="flex flex-wrap gap-2">
                   {product.sizes.map((size) => (
                     <Badge key={size} variant="secondary">
-                      {size}"
+                      {size}&quot;
                     </Badge>
                   ))}
                 </div>

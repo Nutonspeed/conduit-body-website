@@ -38,7 +38,7 @@ export default function CartPage() {
               <div key={`${item.productId}-${item.size}`} className="flex justify-between items-center border p-3 rounded-lg">
                 <div className="font-sarabun">
                   <div>{item.productName}</div>
-                  <div className="text-sm text-gray-600">ขนาด: {item.size}"</div>
+                  <div className="text-sm text-gray-600">ขนาด: {item.size}&quot;</div>
                 </div>
                 <div className="flex items-center gap-2">
                   <Button variant="outline" size="icon" className="h-8 w-8" onClick={() => updateQuantity(item.productId, item.size, item.quantity - 1)}>
