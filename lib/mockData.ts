@@ -630,6 +630,7 @@ export interface Invoice {
   customer: string
   items: QuoteItem[]
   amount: number
+  status: "รอชำระ" | "ชำระแล้ว" | "หมดอายุ"
   createdAt: string
 }
 
