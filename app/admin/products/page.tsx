@@ -271,9 +271,9 @@ export default function AdminProducts() {
                     <TableCell className="font-sarabun">{product.material}</TableCell>
                     <TableCell>
                       <div className="flex flex-wrap gap-1">
-                        {product.sizes.slice(0, 3).map((size) => (
+                            {product.sizes.slice(0, 3).map((size) => (
                           <Badge key={size} variant="secondary" className="text-xs">
-                            {size}"
+                            {size}&quot;
                           </Badge>
                         ))}
                         {product.sizes.length > 3 && (

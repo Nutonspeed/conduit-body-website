@@ -15,7 +15,11 @@ export default function AdminQuotes() {
   const router = useRouter()
   const { isAuthenticated } = useAuthStore()
   const { quotes, updateStatus } = useQuoteStore()
-  const { createInvoiceFromQuote, getInvoiceForQuote } = useInvoiceStore()
+  const {
+    createInvoiceFromQuote,
+    getInvoiceForQuote,
+    updateInvoiceStatus,
+  } = useInvoiceStore()
   const { toast } = useToast()
 
   useEffect(() => {
@@ -127,6 +131,22 @@ export default function AdminQuotes() {
                                   ))}
                                 </ul>
                                 <p className="font-bold">รวม ฿{invoice.amount.toLocaleString()}</p>
+                                <div className="flex items-center gap-2">
+                                  <span>สถานะ:</span>
+                                  <Select
+                                    value={invoice.status}
+                                    onValueChange={(v) => updateInvoiceStatus(invoice.invoiceId, v as any)}
+                                  >
+                                    <SelectTrigger className="w-28">
+                                      <SelectValue />
+                                    </SelectTrigger>
+                                    <SelectContent>
+                                      <SelectItem value="รอชำระ">รอชำระ</SelectItem>
+                                      <SelectItem value="ชำระแล้ว">ชำระแล้ว</SelectItem>
+                                      <SelectItem value="หมดอายุ">หมดอายุ</SelectItem>
+                                    </SelectContent>
+                                  </Select>
+                                </div>
                                 <Button
                                   className="mt-2"
                                   onClick={() => {
@@ -144,11 +164,13 @@ export default function AdminQuotes() {
                                 <Button
                                   variant="ghost"
                                   onClick={() => {
-                                    console.log(`ส่ง mock quote ไปยังแชท: ${q.id}`)
-                                    toast({ description: "ส่งลิงก์ใบเสนอราคาแล้ว (mock)" })
+                                    navigator.clipboard.writeText(
+                                      `${window.location.origin}/invoice/${invoice.invoiceId}`,
+                                    )
+                                    toast({ description: "คัดลอกลิงก์แล้ว" })
                                   }}
                                 >
-                                  ส่งใบเสนอราคาเข้าแชท
+                                  คัดลอกลิงก์บิล
                                 </Button>
                               </div>
                             </DialogContent>

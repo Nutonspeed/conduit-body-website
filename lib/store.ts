@@ -318,6 +318,11 @@ interface InvoiceState {
   invoices: Invoice[]
   createInvoiceFromQuote: (quote: QuoteRequest) => Invoice
   getInvoiceForQuote: (quoteId: string) => Invoice | undefined
+  getInvoiceById: (invoiceId: string) => Invoice | undefined
+  updateInvoiceStatus: (
+    invoiceId: string,
+    status: Invoice["status"],
+  ) => void
 }
 
 export const useInvoiceStore = create<InvoiceState>()(
@@ -334,12 +339,21 @@ export const useInvoiceStore = create<InvoiceState>()(
             (sum, item) => sum + item.price * item.quantity,
             0,
           ),
+          status: "รอชำระ",
           createdAt: new Date().toISOString(),
         }
         set((state) => ({ invoices: [invoice, ...state.invoices] }))
         return invoice
       },
       getInvoiceForQuote: (id) => get().invoices.find((inv) => inv.quoteId === id),
+      getInvoiceById: (invoiceId) =>
+        get().invoices.find((inv) => inv.invoiceId === invoiceId),
+      updateInvoiceStatus: (invoiceId, status) =>
+        set((state) => ({
+          invoices: state.invoices.map((inv) =>
+            inv.invoiceId === invoiceId ? { ...inv, status } : inv,
+          ),
+        })),
     }),
     { name: "invoice-storage" },
   ),

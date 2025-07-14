@@ -255,7 +255,7 @@ export default function LiveChatPage() {
     setNewMessage("")
   }
 
-  const useCannedResponse = (response: string) => {
+  const handleCannedResponse = (response: string) => {
     setNewMessage(response)
   }
 
@@ -507,7 +507,7 @@ export default function LiveChatPage() {
                             variant="outline"
                             size="sm"
                             className="w-full text-left justify-start h-auto p-2 bg-transparent"
-                            onClick={() => useCannedResponse(response.message)}
+                            onClick={() => handleCannedResponse(response.message)}
                           >
                             <div>
                               <p className="font-medium text-xs">{response.title}</p>
