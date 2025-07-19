@@ -7,9 +7,8 @@ import type {
   QuoteItem,
   Customer,
   Invoice,
-} from "./mockData"
+} from "./types"
 import {
-  products as initialProducts,
   mockLeads,
   mockQuotes,
   mockCustomers,
@@ -51,27 +50,55 @@ export const useAuthStore = create<AuthState>()(
 // Product Store
 interface ProductState {
   products: Product[]
-  addProduct: (product: Omit<Product, "id">) => void
-  updateProduct: (id: string, product: Partial<Product>) => void
-  deleteProduct: (id: string) => void
+  fetchProducts: () => Promise<void>
+  addProduct: (product: Omit<Product, "id">) => Promise<void>
+  updateProduct: (id: string, product: Partial<Product>) => Promise<void>
+  deleteProduct: (id: string) => Promise<void>
 }
 
 export const useProductStore = create<ProductState>()(
   persist(
     (set) => ({
-      products: initialProducts,
-      addProduct: (product) =>
-        set((state) => ({
-          products: [...state.products, { ...product, id: Date.now().toString() }],
-        })),
-      updateProduct: (id, updatedProduct) =>
-        set((state) => ({
-          products: state.products.map((product) => (product.id === id ? { ...product, ...updatedProduct } : product)),
-        })),
-      deleteProduct: (id) =>
-        set((state) => ({
-          products: state.products.filter((product) => product.id !== id),
-        })),
+      products: [],
+      fetchProducts: async () => {
+        const res = await fetch("/api/products")
+        if (res.ok) {
+          const data = await res.json()
+          set({ products: data })
+        }
+      },
+      addProduct: async (product) => {
+        const res = await fetch("/api/products", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(product),
+        })
+        if (res.ok) {
+          const newProd = await res.json()
+          set((state) => ({ products: [...state.products, newProd] }))
+        }
+      },
+      updateProduct: async (id, updatedProduct) => {
+        const res = await fetch(`/api/products/${id}`, {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(updatedProduct),
+        })
+        if (res.ok) {
+          const updated = await res.json()
+          set((state) => ({
+            products: state.products.map((p) => (p.id === id ? updated : p)),
+          }))
+        }
+      },
+      deleteProduct: async (id) => {
+        const res = await fetch(`/api/products/${id}`, { method: "DELETE" })
+        if (res.ok) {
+          set((state) => ({
+            products: state.products.filter((p) => p.id !== id),
+          }))
+        }
+      },
     }),
     {
       name: "product-storage",
