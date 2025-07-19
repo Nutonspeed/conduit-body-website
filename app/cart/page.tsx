@@ -1,16 +1,29 @@
 "use client"
 
 import Link from "next/link"
+import { useState } from "react"
 import { useQuoteCartStore } from "@/lib/store"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Separator } from "@/components/ui/separator"
+import { Input } from "@/components/ui/input"
 import { Plus, Minus, Trash2 } from "lucide-react"
 
 export default function CartPage() {
-  const { items, updateQuantity, removeItem } = useQuoteCartStore()
+  const {
+    items,
+    updateQuantity,
+    removeItem,
+    applyCoupon,
+    clearCoupon,
+    coupon,
+    subtotal,
+    autoDiscount,
+    total,
+  } = useQuoteCartStore()
 
-  const total = items.reduce((sum, item) => sum + item.price * item.quantity, 0)
+  const [code, setCode] = useState("")
+  const [error, setError] = useState("")
 
   if (items.length === 0) {
     return (
@@ -55,9 +68,62 @@ export default function CartPage() {
               </div>
             ))}
             <Separator />
-            <div className="flex justify-between font-bold">
-              <span className="font-sarabun">รวม</span>
-              <span className="text-blue-600">฿{total.toLocaleString()}</span>
+            <div className="flex items-center gap-2">
+              <Input
+                placeholder="ใส่โค้ดคูปอง"
+                value={code}
+                onChange={(e) => setCode(e.target.value)}
+                className="flex-1"
+              />
+              {coupon ? (
+                <Button variant="ghost" onClick={() => clearCoupon()}>
+                  ยกเลิกคูปอง
+                </Button>
+              ) : (
+                <Button
+                  onClick={async () => {
+                    const ok = await applyCoupon(code)
+                    if (!ok) setError("โค้ดไม่ถูกต้องหรือหมดอายุ")
+                    else {
+                      setError("")
+                      setCode("")
+                    }
+                  }}
+                >
+                  ใช้คูปอง
+                </Button>
+              )}
+            </div>
+            {error && (
+              <p className="text-sm text-red-600 font-sarabun">{error}</p>
+            )}
+            <Separator />
+            <div className="space-y-1 font-sarabun">
+              <div className="flex justify-between">
+                <span>ยอดสินค้า</span>
+                <span>฿{subtotal().toLocaleString()}</span>
+              </div>
+              {autoDiscount() > 0 && (
+                <div className="flex justify-between text-green-600">
+                  <span>ส่วนลดพิเศษ</span>
+                  <span>-฿{autoDiscount().toLocaleString()}</span>
+                </div>
+              )}
+              {coupon && (
+                <div className="flex justify-between text-green-600">
+                  <span>คูปอง {coupon.code}</span>
+                  <span>
+                    -฿{(
+                      (subtotal() - autoDiscount()) *
+                      (coupon.discount / 100)
+                    ).toLocaleString()}
+                  </span>
+                </div>
+              )}
+              <div className="flex justify-between font-bold">
+                <span>รวม</span>
+                <span className="text-blue-600">฿{total().toLocaleString()}</span>
+              </div>
             </div>
           </CardContent>
         </Card>

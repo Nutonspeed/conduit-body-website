@@ -7,6 +7,7 @@ import type {
   QuoteItem,
   Customer,
   Invoice,
+  Coupon,
 } from "./mockData"
 import {
   products as initialProducts,
@@ -212,21 +213,58 @@ export const useMarketingStore = create<MarketingState>()(
   ),
 )
 
+// Coupon Store
+interface CouponState {
+  coupons: Coupon[]
+  fetchCoupons: () => Promise<void>
+  addCoupon: (
+    coupon: Omit<Coupon, "id" | "createdAt">
+  ) => Promise<void>
+}
+
+export const useCouponStore = create<CouponState>((set) => ({
+  coupons: [],
+  fetchCoupons: async () => {
+    const res = await fetch("/api/coupons")
+    const data = await res.json()
+    set({ coupons: data })
+  },
+  addCoupon: async (coupon) => {
+    const res = await fetch("/api/coupons", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(coupon),
+    })
+    if (res.ok) {
+      const newCoupon = await res.json()
+      set((state) => ({ coupons: [newCoupon, ...state.coupons] }))
+    }
+  },
+}))
+
 // Quote Cart Store
 interface CartItem extends QuoteItem {}
 
 interface QuoteCartState {
   items: CartItem[]
+  coupon: Coupon | null
   addItem: (item: CartItem) => void
   updateQuantity: (productId: string, size: string, quantity: number) => void
   removeItem: (productId: string, size: string) => void
   clearCart: () => void
+  applyCoupon: (code: string) => Promise<boolean>
+  clearCoupon: () => void
+  subtotal: () => number
+  autoDiscount: () => number
+  total: () => number
+  discountPercent: () => number
 }
 
 export const useQuoteCartStore = create<QuoteCartState>()(
   persist(
-    (set) => ({
+    (set, get) => ({
       items: [],
+      coupon: null,
       addItem: (item) =>
         set((state) => {
           const existing = state.items.find(
@@ -257,7 +295,41 @@ export const useQuoteCartStore = create<QuoteCartState>()(
             (i) => !(i.productId === productId && i.size === size),
           ),
         })),
-      clearCart: () => set({ items: [] }),
+      clearCart: () => set({ items: [], coupon: null }),
+      applyCoupon: async (code) => {
+        const res = await fetch('/api/coupons')
+        if (!res.ok) return false
+        const coupons: Coupon[] = await res.json()
+        const coupon = coupons.find(
+          (c) => c.code.toLowerCase() === code.toLowerCase() &&
+            new Date(c.expiresAt) > new Date()
+        )
+        if (coupon) {
+          set({ coupon })
+          return true
+        }
+        return false
+      },
+      clearCoupon: () => set({ coupon: null }),
+      subtotal: () =>
+        get().items.reduce((sum, item) => sum + item.price * item.quantity, 0),
+      autoDiscount: () => {
+        const sub = get().subtotal()
+        return sub > 2000 ? sub * 0.1 : 0
+      },
+      discountPercent: () => {
+        const auto = get().subtotal() > 2000 ? 10 : 0
+        const coupon = get().coupon?.discount ?? 0
+        return auto + coupon
+      },
+      total: () => {
+        const sub = get().subtotal()
+        const auto = get().autoDiscount()
+        const afterAuto = sub - auto
+        const coupon = get().coupon
+        const couponAmount = coupon ? afterAuto * (coupon.discount / 100) : 0
+        return afterAuto - couponAmount
+      },
     }),
     { name: "quote-cart-storage" },
   ),
