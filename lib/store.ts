@@ -12,7 +12,6 @@ import {
   products as initialProducts,
   mockLeads,
   mockQuotes,
-  mockCustomers,
   mockInvoiceHistory,
 } from "./mockData"
 
@@ -82,39 +81,33 @@ export const useProductStore = create<ProductState>()(
 // Customer Store
 interface CustomerState {
   customers: Customer[]
+  fetchCustomers: () => Promise<void>
   addCustomer: (
     customer: Omit<Customer, "id" | "joinedAt" | "contactCount"> & {
       contactCount?: number
     }
-  ) => void
+  ) => Promise<void>
 }
 
-export const useCustomerStore = create<CustomerState>()(
-  persist(
-    (set) => ({
-      customers: mockCustomers,
-      addCustomer: (customer) =>
-        set((state) => {
-          const exists = state.customers.some(
-            (c) => c.phone === customer.phone && c.from === customer.from
-          )
-          if (exists) return { customers: state.customers }
-          return {
-            customers: [
-              {
-                ...customer,
-                id: Date.now().toString(),
-                joinedAt: new Date().toISOString(),
-                contactCount: customer.contactCount ?? 1,
-              },
-              ...state.customers,
-            ],
-          }
-        }),
-    }),
-    { name: "customer-storage" },
-  ),
-)
+export const useCustomerStore = create<CustomerState>((set) => ({
+  customers: [],
+  fetchCustomers: async () => {
+    const res = await fetch("/api/customers")
+    const data = await res.json()
+    set({ customers: data })
+  },
+  addCustomer: async (customer) => {
+    const res = await fetch("/api/customers", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(customer),
+    })
+    if (res.ok) {
+      const newCustomer = await res.json()
+      set((state) => ({ customers: [newCustomer, ...state.customers] }))
+    }
+  },
+}))
 
 // Lead Store
 interface LeadState {

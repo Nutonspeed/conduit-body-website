@@ -11,14 +11,16 @@ import { useAuthStore, useCustomerStore } from "@/lib/store"
 export default function AdminCustomers() {
   const router = useRouter()
   const { isAuthenticated } = useAuthStore()
-  const { customers } = useCustomerStore()
+  const { customers, fetchCustomers } = useCustomerStore()
   const [query, setQuery] = useState("")
 
   useEffect(() => {
     if (!isAuthenticated) {
       router.push("/admin/login")
+    } else {
+      fetchCustomers()
     }
-  }, [isAuthenticated, router])
+  }, [isAuthenticated, router, fetchCustomers])
 
   if (!isAuthenticated) {
     return null
