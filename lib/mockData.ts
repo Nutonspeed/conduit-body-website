@@ -617,6 +617,7 @@ export interface Customer {
   id: string
   name: string
   phone: string
+  address?: string
   from: "lead" | "quote"
   joinedAt: string
   contactCount: number
