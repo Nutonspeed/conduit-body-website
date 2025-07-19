@@ -85,6 +85,7 @@ interface CustomerState {
       contactCount?: number
     }
   ) => Promise<void>
+  updateCustomer: (id: string, data: Partial<Customer>) => Promise<void>
 }
 
 export const useCustomerStore = create<CustomerState>((set) => ({
@@ -103,6 +104,19 @@ export const useCustomerStore = create<CustomerState>((set) => ({
     if (res.ok) {
       const newCustomer = await res.json()
       set((state) => ({ customers: [newCustomer, ...state.customers] }))
+    }
+  },
+  updateCustomer: async (id, data) => {
+    const res = await fetch(`/api/customers/${id}`, {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(data),
+    })
+    if (res.ok) {
+      const updated = await res.json()
+      set((state) => ({
+        customers: state.customers.map((c) => (c.id === id ? updated : c)),
+      }))
     }
   },
 }))
@@ -346,3 +360,65 @@ export const useInvoiceStore = create<InvoiceState>()(
     { name: "invoice-storage" },
   ),
 )
+
+// Tag Store
+interface TagState {
+  tags: string[]
+  fetchTags: () => Promise<void>
+  addTag: (name: string) => Promise<void>
+}
+
+export const useTagStore = create<TagState>((set) => ({
+  tags: [],
+  fetchTags: async () => {
+    const res = await fetch("/api/tags")
+    const data = await res.json()
+    set({ tags: data })
+  },
+  addTag: async (name) => {
+    await fetch("/api/tags", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ name }),
+    })
+    set((state) => ({ tags: state.tags.includes(name) ? state.tags : [...state.tags, name] }))
+  },
+}))
+
+// Order Store
+interface Order {
+  id: string
+  customerName: string
+  total: number
+  status: string
+  createdAt: string
+  tags?: string[]
+}
+
+interface OrderState {
+  orders: Order[]
+  fetchOrders: () => Promise<void>
+  updateOrder: (id: string, order: Partial<Order>) => Promise<void>
+}
+
+export const useOrderStore = create<OrderState>((set) => ({
+  orders: [],
+  fetchOrders: async () => {
+    const res = await fetch("/api/orders")
+    const data = await res.json()
+    set({ orders: data })
+  },
+  updateOrder: async (id, order) => {
+    const res = await fetch(`/api/orders/${id}`, {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(order),
+    })
+    if (res.ok) {
+      const updated = await res.json()
+      set((state) => ({
+        orders: state.orders.map((o) => (o.id === id ? updated : o)),
+      }))
+    }
+  },
+}))

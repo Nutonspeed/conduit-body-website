@@ -6,7 +6,8 @@
     "address": "123 \u0e2a\u0e38\u0e02\u0e38\u0e21\u0e27\u0e34\u0e17",
     "from": "lead",
     "joinedAt": "2024-05-01T00:00:00.000Z",
-    "contactCount": 1
+    "contactCount": 1,
+    "tags": ["VIP"]
   },
   {
     "id": "1710000000002",
@@ -15,6 +16,7 @@
     "address": "456 \u0e16\u0e19\u0e19\u0e1e\u0e23\u0e30\u0e23\u0e32\u0e21 2",
     "from": "quote",
     "joinedAt": "2024-05-10T00:00:00.000Z",
-    "contactCount": 2
+    "contactCount": 2,
+    "tags": []
   }
 ]

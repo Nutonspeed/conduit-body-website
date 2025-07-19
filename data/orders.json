@@ -1,0 +1,10 @@
+[
+  {
+    "id": "O1",
+    "customerName": "บริษัท ABC",
+    "total": 10000,
+    "status": "pending",
+    "createdAt": "2024-07-01T00:00:00.000Z",
+    "tags": []
+  }
+]

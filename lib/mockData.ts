@@ -621,6 +621,7 @@ export interface Customer {
   from: "lead" | "quote"
   joinedAt: string
   contactCount: number
+  tags?: string[]
 }
 
 export const mockCustomers: Customer[] = []
@@ -632,6 +633,7 @@ export interface Invoice {
   items: QuoteItem[]
   amount: number
   createdAt: string
+  tags?: string[]
 }
 
 export const mockInvoiceHistory: Invoice[] = []

@@ -28,6 +28,7 @@ const updateSchema = z.object({
   phone: z.string().optional(),
   address: z.string().optional(),
   contactCount: z.number().optional(),
+  tags: z.array(z.string()).optional(),
 })
 
 export async function GET(
