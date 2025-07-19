@@ -260,52 +260,98 @@ export const useQuoteCartStore = create<QuoteCartState>()(
   ),
 )
 
+// Order Store
+interface Order {
+  id: string
+  customer: {
+    name: string
+    company?: string
+    phone: string
+    email: string
+    address?: string
+    notes?: string
+  }
+  items: QuoteItem[]
+  total: number
+  orderDate: string
+}
+
+interface OrderState {
+  orders: Order[]
+  fetchOrders: () => Promise<void>
+  addOrder: (
+    order: Omit<Order, "id" | "orderDate">
+  ) => Promise<Order | undefined>
+}
+
+export const useOrderStore = create<OrderState>((set) => ({
+  orders: [],
+  fetchOrders: async () => {
+    const res = await fetch("/api/orders")
+    const data = await res.json()
+    set({ orders: data })
+  },
+  addOrder: async (order) => {
+    const res = await fetch("/api/orders", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(order),
+    })
+    if (res.ok) {
+      const newOrder = await res.json()
+      set((state) => ({ orders: [newOrder, ...state.orders] }))
+      return newOrder
+    }
+  },
+}))
+
 // Quote Store
 interface QuoteState {
   quotes: QuoteRequest[]
+  fetchQuotes: () => Promise<void>
   addQuote: (
     quote: Omit<QuoteRequest, "id" | "createdAt" | "status">
-  ) => void
+  ) => Promise<QuoteRequest | undefined>
   updateStatus: (id: string, status: QuoteRequest["status"]) => void
 }
 
-export const useQuoteStore = create<QuoteState>()(
-  persist(
-    (set) => ({
-      quotes: mockQuotes,
-      addQuote: (quote) =>
-        set((state) => ({
-          quotes: [
-            {
-              ...quote,
-              id: Date.now().toString(),
-              status: "ใหม่",
-              createdAt: new Date().toISOString(),
-            },
-            ...state.quotes,
-          ],
-        })),
-      updateStatus: (id, status) =>
-        set((state) => {
-          const updated = state.quotes.map((q) =>
-            q.id === id ? { ...q, status } : q,
-          )
-          const quote = state.quotes.find((q) => q.id === id)
-          if (status === "ปิดการขาย" && quote) {
-            const { addCustomer } = useCustomerStore.getState()
-            addCustomer({
-              name: quote.name,
-              phone: quote.phone,
-              from: "quote",
-              contactCount: 1,
-            })
-          }
-          return { quotes: updated }
-        }),
+export const useQuoteStore = create<QuoteState>((set) => ({
+  quotes: [],
+  fetchQuotes: async () => {
+    const res = await fetch("/api/quotes")
+    const data = await res.json()
+    set({ quotes: data })
+  },
+  addQuote: async (quote) => {
+    const res = await fetch("/api/quotes", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(quote),
+    })
+    if (res.ok) {
+      const newQuote = await res.json()
+      set((state) => ({ quotes: [newQuote, ...state.quotes] }))
+      return newQuote
+    }
+  },
+  updateStatus: (id, status) =>
+    set((state) => {
+      const updated = state.quotes.map((q) =>
+        q.id === id ? { ...q, status } : q,
+      )
+      const quote = state.quotes.find((q) => q.id === id)
+      if (status === "ปิดการขาย" && quote) {
+        const { addCustomer } = useCustomerStore.getState()
+        addCustomer({
+          name: quote.name,
+          phone: quote.phone,
+          from: "quote",
+          contactCount: 1,
+        })
+      }
+      return { quotes: updated }
     }),
-    { name: "quote-storage" },
-  ),
-)
+}))
 
 interface InvoiceState {
   invoices: Invoice[]

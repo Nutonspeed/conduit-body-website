@@ -3,7 +3,7 @@
 import type React from "react"
 
 import { useState, useEffect } from "react"
-import { useSearchParams } from "next/navigation"
+import { useSearchParams, useRouter } from "next/navigation"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
@@ -13,6 +13,7 @@ import { Badge } from "@/components/ui/badge"
 import { Separator } from "@/components/ui/separator"
 import { ShoppingCart, Plus, Minus, Trash2 } from "lucide-react"
 import { products } from "@/lib/mockData"
+import { useOrderStore } from "@/lib/store"
 
 interface CartItem {
   productId: string
@@ -77,7 +78,10 @@ export default function OrderPage() {
     return cartItems.reduce((total, item) => total + item.price * item.quantity, 0)
   }
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const router = useRouter()
+  const { addOrder } = useOrderStore()
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
 
     if (cartItems.length === 0) {
@@ -85,29 +89,25 @@ export default function OrderPage() {
       return
     }
 
-    // Create order summary
     const orderData = {
       customer: customerInfo,
       items: cartItems,
       total: getTotalPrice(),
-      orderDate: new Date().toISOString(),
     }
 
-    console.log("Order submitted:", orderData)
-
-    // Simulate order processing
-    alert("ขอบคุณสำหรับคำขอใบเสนอราคา เราจะติดต่อกลับเพื่อยืนยันรายละเอียดโดยเร็วที่สุด")
-
-    // Reset form
-    setCartItems([])
-    setCustomerInfo({
-      name: "",
-      company: "",
-      phone: "",
-      email: "",
-      address: "",
-      notes: "",
-    })
+    const newOrder = await addOrder(orderData)
+    if (newOrder) {
+      setCartItems([])
+      setCustomerInfo({
+        name: "",
+        company: "",
+        phone: "",
+        email: "",
+        address: "",
+        notes: "",
+      })
+      router.push(`/order/success?id=${newOrder.id}`)
+    }
   }
 
   return (

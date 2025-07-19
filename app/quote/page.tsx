@@ -18,15 +18,16 @@ export default function QuotePage() {
   const total = items.reduce((sum, item) => sum + item.price * item.quantity, 0)
   const shipping = total < 500 ? 50 : total <= 1000 ? 80 : 120
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     if (items.length === 0) return
     const data = { ...form, items }
-    console.log("Quote request:", data)
-    addQuote(data)
-    toast({ title: "ส่งคำขอแล้ว", description: "เราจะติดต่อกลับโดยเร็วที่สุด" })
-    clearCart()
-    setForm({ name: "", phone: "", message: "" })
+    const q = await addQuote(data)
+    if (q) {
+      toast({ title: "ส่งคำขอแล้ว", description: "เราจะติดต่อกลับโดยเร็วที่สุด" })
+      clearCart()
+      setForm({ name: "", phone: "", message: "" })
+    }
   }
 
   return (
