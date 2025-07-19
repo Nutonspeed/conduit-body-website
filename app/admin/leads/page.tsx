@@ -23,7 +23,8 @@ import { useToast } from "@/hooks/use-toast"
 export default function AdminLeads() {
   const router = useRouter()
   const { isAuthenticated } = useAuthStore()
-  const { leads, updateLeadStatus, addNote, deleteLead } = useLeadStore()
+  const { leads, fetchLeads, updateLeadStatus, addNote, deleteLead } =
+    useLeadStore()
   const { toast } = useToast()
 
   const [selectedLead, setSelectedLead] = useState<any>(null)
@@ -33,8 +34,10 @@ export default function AdminLeads() {
   useEffect(() => {
     if (!isAuthenticated) {
       router.push("/admin/login")
+    } else {
+      fetchLeads()
     }
-  }, [isAuthenticated, router])
+  }, [isAuthenticated, router, fetchLeads])
 
   if (!isAuthenticated) {
     return null

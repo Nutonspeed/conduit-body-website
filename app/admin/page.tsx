@@ -10,13 +10,15 @@ import { useAuthStore, useLeadStore } from "@/lib/store"
 export default function AdminDashboard() {
   const router = useRouter()
   const { isAuthenticated } = useAuthStore()
-  const { leads } = useLeadStore()
+  const { leads, fetchLeads } = useLeadStore()
 
   useEffect(() => {
     if (!isAuthenticated) {
       router.push("/admin/login")
+    } else {
+      fetchLeads()
     }
-  }, [isAuthenticated, router])
+  }, [isAuthenticated, router, fetchLeads])
 
   if (!isAuthenticated) {
     return null
