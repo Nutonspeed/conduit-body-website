@@ -20,7 +20,8 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
-import { Plus, Edit, Trash2 } from "lucide-react"
+import { Plus, Edit, Trash2, SlidersHorizontal } from "lucide-react"
+import Link from "next/link"
 import { useAuthStore, useProductStore } from "@/lib/store"
 
 export default function AdminProducts() {
@@ -291,6 +292,11 @@ export default function AdminProducts() {
                         </Button>
                         <Button size="sm" variant="outline" onClick={() => handleDelete(product.id)}>
                           <Trash2 className="w-4 h-4" />
+                        </Button>
+                        <Button size="sm" variant="outline" asChild>
+                          <Link href={`/admin/products/${product.id}`}>
+                            <SlidersHorizontal className="w-4 h-4" />
+                          </Link>
                         </Button>
                       </div>
                     </TableCell>

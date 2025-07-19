@@ -13,6 +13,20 @@ export interface Product {
   features: string[]
   applications: string[]
   certifications: string[]
+  options?: ProductOption[]
+  variants?: ProductVariant[]
+}
+
+export interface ProductOption {
+  name: string
+  values: string[]
+}
+
+export interface ProductVariant {
+  sku: string
+  options: Record<string, string>
+  price: number
+  stock: number
 }
 
 export interface Lead {
@@ -31,7 +45,7 @@ export interface Lead {
 }
 
 // ข้อมูลสินค้าครบถ้วนจากไฟล์ JSON พร้อมการจัดหมวดหมู่
-export const products: Product[] = [
+const baseProducts: Product[] = [
   // Explosion-Proof Series
   {
     id: "1",
@@ -464,6 +478,17 @@ export const products: Product[] = [
     certifications: ["UL Listed", "NEMA Standard", "Food Grade"],
   },
 ]
+
+export const products: Product[] = baseProducts.map((p) => ({
+  ...p,
+  options: [{ name: "size", values: p.sizes }],
+  variants: p.sizes.map((size, idx) => ({
+    sku: `${p.id}-${size.replace(/\//g, "_")}`,
+    options: { size },
+    price: p.basePrice + idx * 10,
+    stock: 20 - idx,
+  })),
+}))
 
 export const mockLeads: Lead[] = [
   {

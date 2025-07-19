@@ -55,16 +55,29 @@ interface ProductState {
 
 export const useProductStore = create<ProductState>()(
   persist(
-    (set) => ({
+    (set, get) => ({
       products: initialProducts,
       addProduct: (product) =>
         set((state) => ({
           products: [...state.products, { ...product, id: Date.now().toString() }],
         })),
-      updateProduct: (id, updatedProduct) =>
+      updateProduct: (id, updatedProduct) => {
         set((state) => ({
-          products: state.products.map((product) => (product.id === id ? { ...product, ...updatedProduct } : product)),
-        })),
+          products: state.products.map((product) =>
+            product.id === id ? { ...product, ...updatedProduct } : product,
+          ),
+        }))
+        const prod = get().products.find((p) => p.id === id)
+        if (prod && prod.variants) {
+          const threshold = useSettingsStore.getState().stockThreshold
+          const { addNotification } = useNotificationStore.getState()
+          prod.variants.forEach((v) => {
+            if (v.stock <= threshold) {
+              addNotification(`สต็อกต่ำ ${prod.name} (${v.sku})`)
+            }
+          })
+        }
+      },
       deleteProduct: (id) =>
         set((state) => ({
           products: state.products.filter((product) => product.id !== id),
@@ -344,5 +357,60 @@ export const useInvoiceStore = create<InvoiceState>()(
       getInvoiceForQuote: (id) => get().invoices.find((inv) => inv.quoteId === id),
     }),
     { name: "invoice-storage" },
+  ),
+)
+
+interface SettingsState {
+  stockThreshold: number
+  setThreshold: (value: number) => void
+}
+
+export const useSettingsStore = create<SettingsState>()(
+  persist(
+    (set) => ({
+      stockThreshold: 5,
+      setThreshold: (value) => set({ stockThreshold: value }),
+    }),
+    { name: "settings-storage" },
+  ),
+)
+
+export interface Notification {
+  id: string
+  message: string
+  read: boolean
+  createdAt: string
+}
+
+interface NotificationState {
+  notifications: Notification[]
+  addNotification: (message: string) => void
+  markRead: (id: string) => void
+}
+
+export const useNotificationStore = create<NotificationState>()(
+  persist(
+    (set) => ({
+      notifications: [],
+      addNotification: (message) =>
+        set((state) => ({
+          notifications: [
+            {
+              id: Date.now().toString(),
+              message,
+              read: false,
+              createdAt: new Date().toISOString(),
+            },
+            ...state.notifications,
+          ],
+        })),
+      markRead: (id) =>
+        set((state) => ({
+          notifications: state.notifications.map((n) =>
+            n.id === id ? { ...n, read: true } : n,
+          ),
+        })),
+    }),
+    { name: "notification-storage" },
   ),
 )

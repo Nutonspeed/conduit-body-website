@@ -9,8 +9,15 @@ import { Badge } from "@/components/ui/badge"
 import { Separator } from "@/components/ui/separator"
 import { CheckCircle, Shield, Award } from "lucide-react"
 import { products } from "@/lib/mockData"
-import { useEffect } from "react"
+import { useEffect, useState } from "react"
 import { useQuoteCartStore } from "@/lib/store"
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select"
 // Add Facebook Pixel tracking for product views
 // import { fbPixelTrack } from "@/components/FacebookPixel" // TODO implement
 
@@ -23,6 +30,18 @@ interface ProductPageProps {
 export default function ProductPage({ params }: ProductPageProps) {
   const product = products.find((p) => p.slug === params.slug)
   const { addItem } = useQuoteCartStore()
+  const [selection, setSelection] = useState<Record<string, string>>(() => {
+    const obj: Record<string, string> = {}
+    product?.options?.forEach((o) => {
+      obj[o.name] = o.values[0]
+    })
+    return obj
+  })
+
+  const selectedVariant = product?.variants?.find((v) =>
+    product.options?.every((o) => v.options[o.name] === selection[o.name]),
+  )
+  const price = selectedVariant ? selectedVariant.price : product?.basePrice || 0
 
   if (!product) {
     notFound()
@@ -77,21 +96,33 @@ export default function ProductPage({ params }: ProductPageProps) {
             <p className="text-lg text-gray-600 mb-6 font-sarabun">{product.description}</p>
 
             <div className="bg-blue-50 p-4 rounded-lg mb-6">
-              <p className="text-2xl font-bold text-blue-600 mb-2">เริ่มต้น ฿{product.basePrice.toLocaleString()}</p>
+              <p className="text-2xl font-bold text-blue-600 mb-2">฿{price.toLocaleString()}</p>
               <p className="text-sm text-gray-600 font-sarabun">*ราคาขึ้นอยู่กับขนาดและจำนวน</p>
             </div>
 
             <div className="space-y-4 mb-6">
-              <div>
-                <h3 className="font-bold mb-2 font-sarabun">ขนาดที่มีจำหน่าย</h3>
-                <div className="flex flex-wrap gap-2">
-                  {product.sizes.map((size) => (
-                    <Badge key={size} variant="secondary">
-                      {size}"
-                    </Badge>
-                  ))}
+              {product.options?.map((opt) => (
+                <div key={opt.name} className="space-y-2">
+                  <h3 className="font-bold font-sarabun">{opt.name}</h3>
+                  <Select
+                    value={selection[opt.name]}
+                    onValueChange={(val) =>
+                      setSelection((prev) => ({ ...prev, [opt.name]: val }))
+                    }
+                  >
+                    <SelectTrigger>
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {opt.values.map((v) => (
+                        <SelectItem key={v} value={v}>
+                          {v}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
                 </div>
-              </div>
+              ))}
 
               <div>
                 <h3 className="font-bold mb-2 font-sarabun">วัสดุ</h3>
@@ -119,9 +150,9 @@ export default function ProductPage({ params }: ProductPageProps) {
                   addItem({
                     productId: product.id,
                     productName: product.name,
-                    size: product.sizes[0],
+                    size: selection["size"] ?? product.sizes[0],
                     quantity: 1,
-                    price: product.basePrice,
+                    price: price,
                   })
                 }
               >
