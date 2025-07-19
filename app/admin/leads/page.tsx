@@ -32,7 +32,7 @@ export default function AdminLeads() {
 
   useEffect(() => {
     if (!isAuthenticated) {
-      router.push("/admin/login")
+      router.push("/login")
     }
   }, [isAuthenticated, router])
 

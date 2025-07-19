@@ -16,9 +16,8 @@ export default function AdminLogin() {
   const login = useAuthStore((state) => state.login)
 
   const [credentials, setCredentials] = useState({
-    username: "",
+    email: "",
     password: "",
-    remember: false,
   })
   const [error, setError] = useState("")
   const [isLoading, setIsLoading] = useState(false)
@@ -29,8 +28,8 @@ export default function AdminLogin() {
     setError("")
 
     try {
-      if (credentials.username === "admin" && credentials.password === "password123") {
-        login(credentials.remember)
+      const ok = await login(credentials.email, credentials.password)
+      if (ok) {
         router.push("/admin")
       } else {
         setError("ชื่อผู้ใช้หรือรหัสผ่านไม่ถูกต้อง")
@@ -52,17 +51,15 @@ export default function AdminLogin() {
         <CardContent>
           <form onSubmit={handleSubmit} className="space-y-4">
             <div>
-              <Label htmlFor="username" className="font-sarabun">
-                ชื่อผู้ใช้
-              </Label>
+              <Label htmlFor="email" className="font-sarabun">อีเมล</Label>
               <Input
-                id="username"
-                type="text"
-                value={credentials.username}
-                onChange={(e) => setCredentials((prev) => ({ ...prev, username: e.target.value }))}
+                id="email"
+                type="email"
+                value={credentials.email}
+                onChange={(e) => setCredentials((prev) => ({ ...prev, email: e.target.value }))}
                 required
                 className="font-sarabun"
-                placeholder="admin"
+                placeholder="admin@example.com"
               />
             </div>
 
@@ -81,16 +78,7 @@ export default function AdminLogin() {
               />
             </div>
 
-            <div className="flex items-center space-x-2">
-              <Checkbox
-                id="remember"
-                checked={credentials.remember}
-                onCheckedChange={(checked) => setCredentials((prev) => ({ ...prev, remember: checked as boolean }))}
-              />
-              <Label htmlFor="remember" className="text-sm font-sarabun">
-                จดจำการเข้าสู่ระบบ
-              </Label>
-            </div>
+
 
             {error && <div className="text-red-600 text-sm font-sarabun">{error}</div>}
 
@@ -103,7 +91,7 @@ export default function AdminLogin() {
             <p className="text-xs text-gray-600 font-sarabun">
               <strong>ข้อมูลทดสอบ:</strong>
               <br />
-              ชื่อผู้ใช้: admin
+              อีเมล: admin@example.com
               <br />
               รหัสผ่าน: password123
             </p>

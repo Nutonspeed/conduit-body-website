@@ -16,7 +16,7 @@ export default function AdminCustomers() {
 
   useEffect(() => {
     if (!isAuthenticated) {
-      router.push("/admin/login")
+      router.push("/login")
     } else {
       fetchCustomers()
     }
