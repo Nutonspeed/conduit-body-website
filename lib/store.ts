@@ -346,3 +346,36 @@ export const useInvoiceStore = create<InvoiceState>()(
     { name: "invoice-storage" },
   ),
 )
+
+// Theme Settings Store
+interface ThemeSettingsState {
+  primaryColor: string
+  font: string
+  fetchTheme: () => Promise<void>
+  updateTheme: (data: Partial<{ primaryColor: string; font: string }>) => Promise<void>
+}
+
+export const useThemeSettingsStore = create<ThemeSettingsState>()(
+  persist(
+    (set) => ({
+      primaryColor: '#3b82f6',
+      font: 'Inter',
+      fetchTheme: async () => {
+        const res = await fetch('/api/theme')
+        if (res.ok) {
+          const data = await res.json()
+          set({ primaryColor: data.primaryColor, font: data.font })
+        }
+      },
+      updateTheme: async (data) => {
+        await fetch('/api/theme', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(data),
+        })
+        set(data)
+      },
+    }),
+    { name: 'theme-settings' },
+  ),
+)
