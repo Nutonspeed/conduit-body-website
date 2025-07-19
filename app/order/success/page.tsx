@@ -1,16 +1,23 @@
 "use client"
 
-import { useEffect } from "react"
+import { useEffect, useState } from "react"
 import Link from "next/link"
+import { useSearchParams } from "next/navigation"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { CheckCircle, Phone, Mail, ArrowLeft } from "lucide-react"
 
 export default function OrderSuccessPage() {
+  const searchParams = useSearchParams()
+  const id = searchParams.get("id")
+  const [order, setOrder] = useState<any | null>(null)
+
   useEffect(() => {
-    // Track successful order
-    console.log("Order completed successfully")
-  }, [])
+    if (!id) return
+    fetch(`/api/orders/${id}`)
+      .then((res) => res.ok && res.json())
+      .then((data) => data && setOrder(data))
+  }, [id])
 
   return (
     <div className="min-h-screen py-16 bg-gray-50">
@@ -93,17 +100,21 @@ export default function OrderSuccessPage() {
               </div>
 
               <div className="text-sm text-gray-500 font-sarabun">
-                <p>หมายเลขอ้างอิง: #{Date.now().toString().slice(-8)}</p>
-                <p>
-                  วันที่:{" "}
-                  {new Date().toLocaleDateString("th-TH", {
-                    year: "numeric",
-                    month: "long",
-                    day: "numeric",
-                    hour: "2-digit",
-                    minute: "2-digit",
-                  })}
-                </p>
+                {order && (
+                  <>
+                    <p>หมายเลขอ้างอิง: #{order.id}</p>
+                    <p>
+                      วันที่:{" "}
+                      {new Date(order.orderDate).toLocaleDateString("th-TH", {
+                        year: "numeric",
+                        month: "long",
+                        day: "numeric",
+                        hour: "2-digit",
+                        minute: "2-digit",
+                      })}
+                    </p>
+                  </>
+                )}
               </div>
             </CardContent>
           </Card>
