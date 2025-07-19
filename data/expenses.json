@@ -1,0 +1,16 @@
+[
+  {
+    "id": "1",
+    "description": "ค่าโฆษณาออนไลน์",
+    "category": "Marketing",
+    "amount": 1500,
+    "date": "2024-05-01"
+  },
+  {
+    "id": "2",
+    "description": "ค่าขนส่งสินค้า",
+    "category": "Logistics",
+    "amount": 800,
+    "date": "2024-05-02"
+  }
+]
