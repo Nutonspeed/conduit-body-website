@@ -29,6 +29,7 @@ const customerSchema = z.object({
   address: z.string().optional(),
   from: z.enum(['lead', 'quote']),
   contactCount: z.number().optional(),
+  tags: z.array(z.string()).optional(),
 })
 
 export async function GET() {
@@ -51,6 +52,7 @@ export async function POST(request: Request) {
     id: Date.now().toString(),
     joinedAt: new Date().toISOString(),
     contactCount: data.contactCount ?? 1,
+    tags: data.tags ?? [],
   }
   customers.unshift(newCustomer)
   await writeData(customers)
