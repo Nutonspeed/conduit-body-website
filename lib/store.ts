@@ -7,6 +7,8 @@ import type {
   QuoteItem,
   Customer,
   Invoice,
+  PaymentMethod,
+  PaymentLog,
 } from "./mockData"
 import {
   products as initialProducts,
@@ -346,3 +348,59 @@ export const useInvoiceStore = create<InvoiceState>()(
     { name: "invoice-storage" },
   ),
 )
+
+// Payment Method Store
+interface PaymentMethodState {
+  methods: PaymentMethod[]
+  fetchMethods: () => Promise<void>
+  addMethod: (method: Omit<PaymentMethod, 'id'>) => Promise<void>
+}
+
+export const usePaymentMethodStore = create<PaymentMethodState>((set) => ({
+  methods: [],
+  fetchMethods: async () => {
+    const res = await fetch('/api/payments/methods')
+    const data = await res.json()
+    set({ methods: data })
+  },
+  addMethod: async (method) => {
+    const res = await fetch('/api/payments/methods', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(method),
+    })
+    if (res.ok) {
+      const newMethod = await res.json()
+      set((state) => ({ methods: [newMethod, ...state.methods] }))
+    }
+  },
+}))
+
+// Payment Log Store
+interface PaymentState {
+  payments: PaymentLog[]
+  fetchPayments: () => Promise<void>
+  verifyPayment: (id: string) => Promise<void>
+}
+
+export const usePaymentStore = create<PaymentState>((set) => ({
+  payments: [],
+  fetchPayments: async () => {
+    const res = await fetch('/api/payments')
+    const data = await res.json()
+    set({ payments: data })
+  },
+  verifyPayment: async (id) => {
+    const res = await fetch(`/api/payments/${id}`, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ status: 'verified' }),
+    })
+    if (res.ok) {
+      const updated = await res.json()
+      set((state) => ({
+        payments: state.payments.map((p) => (p.id === id ? updated : p)),
+      }))
+    }
+  },
+}))

@@ -3,7 +3,7 @@
 import type React from "react"
 
 import { useState, useEffect } from "react"
-import { useSearchParams } from "next/navigation"
+import { useSearchParams, useRouter } from "next/navigation"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
@@ -11,8 +11,10 @@ import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
 import { Badge } from "@/components/ui/badge"
 import { Separator } from "@/components/ui/separator"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { ShoppingCart, Plus, Minus, Trash2 } from "lucide-react"
 import { products } from "@/lib/mockData"
+import { usePaymentMethodStore } from "@/lib/store"
 
 interface CartItem {
   productId: string
@@ -23,6 +25,7 @@ interface CartItem {
 }
 
 export default function OrderPage() {
+  const router = useRouter()
   const searchParams = useSearchParams()
   const productSlug = searchParams.get("product")
 
@@ -35,6 +38,8 @@ export default function OrderPage() {
     address: "",
     notes: "",
   })
+  const { methods, fetchMethods } = usePaymentMethodStore()
+  const [selectedMethod, setSelectedMethod] = useState<string>("")
 
   useEffect(() => {
     if (productSlug) {
@@ -43,7 +48,8 @@ export default function OrderPage() {
         addToCart(product.id, product.name, product.sizes[0], product.basePrice)
       }
     }
-  }, [productSlug])
+    fetchMethods()
+  }, [productSlug, fetchMethods])
 
   const addToCart = (productId: string, productName: string, size: string, price: number) => {
     setCartItems((prev) => {
@@ -85,6 +91,11 @@ export default function OrderPage() {
       return
     }
 
+    if (!selectedMethod) {
+      alert("กรุณาเลือกวิธีชำระเงิน")
+      return
+    }
+
     // Create order summary
     const orderData = {
       customer: customerInfo,
@@ -94,20 +105,7 @@ export default function OrderPage() {
     }
 
     console.log("Order submitted:", orderData)
-
-    // Simulate order processing
-    alert("ขอบคุณสำหรับคำขอใบเสนอราคา เราจะติดต่อกลับเพื่อยืนยันรายละเอียดโดยเร็วที่สุด")
-
-    // Reset form
-    setCartItems([])
-    setCustomerInfo({
-      name: "",
-      company: "",
-      phone: "",
-      email: "",
-      address: "",
-      notes: "",
-    })
+    router.push(`/order/payment?amount=${getTotalPrice()}&method=${selectedMethod}`)
   }
 
   return (
@@ -295,6 +293,22 @@ export default function OrderPage() {
                       onChange={(e) => setCustomerInfo((prev) => ({ ...prev, address: e.target.value }))}
                       placeholder="ที่อยู่สำหรับจัดส่งสินค้า"
                     />
+                  </div>
+
+                  <div>
+                    <Label className="font-sarabun">วิธีชำระเงิน *</Label>
+                    <Select value={selectedMethod} onValueChange={setSelectedMethod}>
+                      <SelectTrigger>
+                        <SelectValue placeholder="เลือกช่องทาง" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {methods.map((m) => (
+                          <SelectItem key={m.id} value={m.id} className="font-sarabun">
+                            {m.name}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
                   </div>
 
                   <div>
