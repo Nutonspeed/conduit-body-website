@@ -4,7 +4,7 @@ import { Inter, Sarabun } from "next/font/google"
 import "./globals.css"
 import { Navbar } from "@/components/Navbar"
 import { Footer } from "@/components/Footer"
-import { LiveChatWidget } from "@/components/LiveChatWidget"
+import { ChatWidget } from "@/components/ChatWidget"
 import { FacebookPixel } from "@/components/FacebookPixel"
 import { Toaster } from "@/components/ui/toaster"
 import { ThemeProvider } from "@/components/theme-provider"
@@ -57,7 +57,7 @@ export default function RootLayout({
           <Navbar />
           <main className="min-h-screen">{children}</main>
           <Footer />
-          <LiveChatWidget />
+          <ChatWidget />
           <Toaster />
         </ThemeProvider>
       </body>

@@ -636,3 +636,18 @@ export interface Invoice {
 
 export const mockInvoiceHistory: Invoice[] = []
 
+
+export interface ChatMessage {
+  id: string
+  sender: 'customer' | 'agent'
+  message: string
+  timestamp: string
+}
+
+export interface SupportTicket {
+  id: string
+  customer: string
+  message: string
+  status: 'open' | 'closed'
+  createdAt: string
+}

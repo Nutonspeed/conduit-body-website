@@ -337,3 +337,64 @@ export const useInvoiceStore = create<InvoiceState>()(
     { name: "invoice-storage" },
   ),
 )
+
+import type { ChatMessage, SupportTicket } from './mockData'
+
+interface LiveChatState {
+  messages: ChatMessage[]
+  fetchMessages: () => Promise<void>
+  sendMessage: (sender: 'customer' | 'agent', message: string) => Promise<void>
+}
+
+export const useLiveChatStore = create<LiveChatState>((set) => ({
+  messages: [],
+  fetchMessages: async () => {
+    const res = await fetch('/api/livechat')
+    const data = await res.json()
+    set({ messages: data })
+  },
+  sendMessage: async (sender, message) => {
+    const res = await fetch('/api/livechat', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ sender, message }),
+    })
+    if (res.ok) {
+      const msg = await res.json()
+      set((state) => ({ messages: [...state.messages, msg] }))
+    }
+  },
+}))
+
+interface TicketState {
+  tickets: SupportTicket[]
+  fetchTickets: () => Promise<void>
+  createTicket: (data: { customer: string; message: string }) => Promise<void>
+  closeTicket: (id: string) => void
+}
+
+export const useTicketStore = create<TicketState>((set) => ({
+  tickets: [],
+  fetchTickets: async () => {
+    const res = await fetch('/api/tickets')
+    const data = await res.json()
+    set({ tickets: data })
+  },
+  createTicket: async (data) => {
+    const res = await fetch('/api/tickets', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data),
+    })
+    if (res.ok) {
+      const ticket = await res.json()
+      set((state) => ({ tickets: [ticket, ...state.tickets] }))
+    }
+  },
+  closeTicket: (id) =>
+    set((state) => ({
+      tickets: state.tickets.map((t) =>
+        t.id === id ? { ...t, status: 'closed' } : t,
+      ),
+    })),
+}))
