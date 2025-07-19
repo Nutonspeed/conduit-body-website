@@ -10,6 +10,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { XAxis, YAxis, CartesianGrid, ResponsiveContainer, PieChart, Pie, Cell, AreaChart, Area } from "recharts"
 import { ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart"
 import { Eye, Users, MousePointer, Clock, Activity } from "lucide-react"
+import { useInvoiceStore, useVisitorStore } from "@/lib/store"
 
 // Mock analytics data
 const realtimeData = {
@@ -77,6 +78,11 @@ const performanceData = [
 export default function AdvancedAnalyticsPage() {
   const [selectedTimeRange, setSelectedTimeRange] = useState("7d")
   const [isRealtime, setIsRealtime] = useState(true)
+  const { invoices } = useInvoiceStore()
+  const totalSales = invoices.reduce((s, i) => s + i.amount, 0)
+  const { visitors, addVisitor, removeVisitor } = useVisitorStore()
+  const [events, setEvents] = useState<any[]>([])
+  const pageViews = events.filter((e) => e.event === "pageview").length
 
   // Simulate real-time updates
   useEffect(() => {
@@ -87,6 +93,25 @@ export default function AdvancedAnalyticsPage() {
       return () => clearInterval(interval)
     }
   }, [isRealtime])
+
+  // Fetch event log
+  useEffect(() => {
+    fetch("/api/analytics/log")
+      .then((res) => res.json())
+      .then(setEvents)
+      .catch(() => {})
+  }, [])
+
+  // Mock realtime visitors
+  useEffect(() => {
+    const pages = ["/", "/products", "/order"]
+    const interval = setInterval(() => {
+      const id = Date.now().toString()
+      addVisitor({ id, page: pages[Math.floor(Math.random() * pages.length)], enteredAt: new Date().toISOString() })
+      setTimeout(() => removeVisitor(id), 10000)
+    }, 3000)
+    return () => clearInterval(interval)
+  }, [addVisitor, removeVisitor])
 
   const getPerformanceStatus = (status: string) => {
     switch (status) {
@@ -125,6 +150,34 @@ export default function AdvancedAnalyticsPage() {
             Real-time
           </Button>
         </div>
+      </div>
+
+      {/* Overview Stats */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+        <Card>
+          <CardHeader>
+            <CardTitle>ยอดวิวทั้งหมด</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <p className="text-2xl font-bold">{pageViews.toLocaleString()}</p>
+          </CardContent>
+        </Card>
+        <Card>
+          <CardHeader>
+            <CardTitle>ผู้ชมขณะนี้</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <p className="text-2xl font-bold">{visitors.length}</p>
+          </CardContent>
+        </Card>
+        <Card>
+          <CardHeader>
+            <CardTitle>ยอดขาย (mock)</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <p className="text-2xl font-bold">฿{totalSales.toLocaleString()}</p>
+          </CardContent>
+        </Card>
       </div>
 
       {/* Real-time Overview */}
@@ -193,6 +246,7 @@ export default function AdvancedAnalyticsPage() {
           <TabsTrigger value="heatmap">Heat Maps</TabsTrigger>
           <TabsTrigger value="funnel">Conversion Funnel</TabsTrigger>
           <TabsTrigger value="performance">Performance</TabsTrigger>
+          <TabsTrigger value="log">Event Log</TabsTrigger>
         </TabsList>
 
         <TabsContent value="traffic" className="space-y-6">
@@ -605,6 +659,34 @@ export default function AdvancedAnalyticsPage() {
               </CardContent>
             </Card>
           </div>
+        </TabsContent>
+
+        <TabsContent value="log" className="space-y-6">
+          <Card>
+            <CardHeader>
+              <CardTitle>Event Log</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <Table>
+                <TableHeader>
+                  <TableRow>
+                    <TableHead>เวลา</TableHead>
+                    <TableHead>อีเวนต์</TableHead>
+                    <TableHead>รายละเอียด</TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {events.map((ev, i) => (
+                    <TableRow key={i}>
+                      <TableCell>{new Date(ev.timestamp).toLocaleString('th-TH')}</TableCell>
+                      <TableCell>{ev.event}</TableCell>
+                      <TableCell>{ev.path || ev.emailId || '-'}</TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </CardContent>
+          </Card>
         </TabsContent>
       </Tabs>
     </div>

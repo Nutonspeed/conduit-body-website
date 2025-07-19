@@ -9,17 +9,24 @@ declare global {
   }
 }
 
+const PIXEL_ID = "1234567890"
+
 export function FacebookPixel() {
   useEffect(() => {
     if (typeof window !== "undefined") {
       window.fbq =
         window.fbq ||
-        (() => {
+        function () {
           ;(window.fbq.q = window.fbq.q || []).push(arguments)
-        })
+        }
       window.fbq.l = +new Date()
-      window.fbq("init", "YOUR_PIXEL_ID")
+      window.fbq("init", PIXEL_ID)
       window.fbq("track", "PageView")
+      fetch("/api/analytics/log", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ event: "pageview", path: window.location.pathname })
+      })
     }
   }, [])
 
@@ -38,7 +45,7 @@ export function FacebookPixel() {
             t.src=v;s=b.getElementsByTagName(e)[0];
             s.parentNode.insertBefore(t,s)}(window, document,'script',
             'https://connect.facebook.net/en_US/fbevents.js');
-            fbq('init', 'YOUR_PIXEL_ID');
+            fbq('init', '${PIXEL_ID}');
             fbq('track', 'PageView');
           `,
         }}
@@ -48,7 +55,7 @@ export function FacebookPixel() {
           height="1"
           width="1"
           style={{ display: "none" }}
-          src="https://www.facebook.com/tr?id=YOUR_PIXEL_ID&ev=PageView&noscript=1"
+          src={`https://www.facebook.com/tr?id=${PIXEL_ID}&ev=PageView&noscript=1`}
           alt=""
         />
       </noscript>

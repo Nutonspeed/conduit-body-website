@@ -9,7 +9,14 @@ import { CheckCircle, Phone, Mail, ArrowLeft } from "lucide-react"
 export default function OrderSuccessPage() {
   useEffect(() => {
     // Track successful order
-    console.log("Order completed successfully")
+    if (typeof window !== "undefined" && window.fbq) {
+      window.fbq("track", "Purchase")
+    }
+    fetch("/api/analytics/log", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ event: "purchase" })
+    })
   }, [])
 
   return (

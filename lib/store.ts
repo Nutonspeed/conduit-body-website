@@ -346,3 +346,26 @@ export const useInvoiceStore = create<InvoiceState>()(
     { name: "invoice-storage" },
   ),
 )
+
+// Visitor Store (mock realtime)
+interface Visitor {
+  id: string
+  page: string
+  enteredAt: string
+}
+
+interface VisitorState {
+  visitors: Visitor[]
+  addVisitor: (v: Visitor) => void
+  removeVisitor: (id: string) => void
+}
+
+export const useVisitorStore = create<VisitorState>(() => ({
+  visitors: [],
+  addVisitor: (v) =>
+    useVisitorStore.setState((state) => ({ visitors: [...state.visitors, v] })),
+  removeVisitor: (id) =>
+    useVisitorStore.setState((state) => ({
+      visitors: state.visitors.filter((v) => v.id !== id),
+    })),
+}))
