@@ -20,7 +20,7 @@ export default function AdminQuotes() {
 
   useEffect(() => {
     if (!isAuthenticated) {
-      router.push("/admin/login")
+      router.push("/login")
     }
   }, [isAuthenticated, router])
 

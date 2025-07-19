@@ -3,3 +3,4 @@
 /api/customers/[id] (PUT) - Update Customer - done
 /api/customers/[id] (DELETE) - Delete Customer - done
 Zustand Store -> Customer API - done
+Block 016-020 - Auth System & User Roles - done

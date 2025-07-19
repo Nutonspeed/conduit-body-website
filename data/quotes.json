@@ -1,0 +1,24 @@
+[
+  {
+    "id": "q1",
+    "name": "คุณสมชาย",
+    "phone": "0899999999",
+    "message": "ต้องการราคา",
+    "items": [
+      { "productId": "1", "productName": "สินค้า A", "size": "M", "quantity": 5, "price": 100 }
+    ],
+    "status": "ใหม่",
+    "createdAt": "2024-05-05T00:00:00.000Z"
+  },
+  {
+    "id": "q2",
+    "name": "คุณวีรชัย",
+    "phone": "0888888888",
+    "message": "สอบถามด่วน",
+    "items": [
+      { "productId": "2", "productName": "สินค้า B", "size": "L", "quantity": 3, "price": 200 }
+    ],
+    "status": "กำลังตอบ",
+    "createdAt": "2024-05-06T00:00:00.000Z"
+  }
+]

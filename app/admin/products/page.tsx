@@ -42,7 +42,7 @@ export default function AdminProducts() {
 
   useEffect(() => {
     if (!isAuthenticated) {
-      router.push("/admin/login")
+      router.push("/login")
     }
   }, [isAuthenticated, router])
 

@@ -17,29 +17,33 @@ import {
 
 // Auth Store
 interface AuthState {
+  token: string | null
+  role: string | null
   isAuthenticated: boolean
-  user: { email: string; name: string } | null
-  login: (email: string, password: string) => boolean
+  login: (email: string, password: string) => Promise<boolean>
   logout: () => void
 }
 
 export const useAuthStore = create<AuthState>()(
   persist(
     (set) => ({
+      token: null,
+      role: null,
       isAuthenticated: false,
-      user: null,
-      login: (email: string, password: string) => {
-        // Simple auth check
-        if (email === "admin@ozgedney.co.th" && password === "admin123") {
-          set({
-            isAuthenticated: true,
-            user: { email, name: "Admin" },
-          })
+      login: async (email: string, password: string) => {
+        const res = await fetch("/api/auth/login", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ email, password }),
+        })
+        if (res.ok) {
+          const data = await res.json()
+          set({ token: data.token, role: data.role, isAuthenticated: true })
           return true
         }
         return false
       },
-      logout: () => set({ isAuthenticated: false, user: null }),
+      logout: () => set({ token: null, role: null, isAuthenticated: false }),
     }),
     {
       name: "auth-storage",

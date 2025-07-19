@@ -14,7 +14,7 @@ export default function AdminDashboard() {
 
   useEffect(() => {
     if (!isAuthenticated) {
-      router.push("/admin/login")
+      router.push("/login")
     }
   }, [isAuthenticated, router])
 
