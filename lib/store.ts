@@ -320,34 +320,40 @@ export const useQuoteStore = create<QuoteState>((set, get) => ({
 
 interface InvoiceState {
   invoices: Invoice[]
-  createInvoiceFromQuote: (quote: QuoteRequest) => Invoice
+  fetchInvoices: () => Promise<void>
+  createInvoiceFromQuote: (quote: QuoteRequest) => Promise<Invoice>
   getInvoiceForQuote: (quoteId: string) => Invoice | undefined
 }
 
-export const useInvoiceStore = create<InvoiceState>()(
-  persist(
-    (set, get) => ({
-      invoices: mockInvoiceHistory,
-      createInvoiceFromQuote: (quote) => {
-        const invoice: Invoice = {
-          invoiceId: `INV-${Date.now().toString().slice(-5)}`,
-          quoteId: quote.id,
-          customer: quote.name,
-          items: quote.items,
-          amount: quote.items.reduce(
-            (sum, item) => sum + item.price * item.quantity,
-            0,
-          ),
-          createdAt: new Date().toISOString(),
-        }
-        set((state) => ({ invoices: [invoice, ...state.invoices] }))
-        return invoice
-      },
-      getInvoiceForQuote: (id) => get().invoices.find((inv) => inv.quoteId === id),
-    }),
-    { name: "invoice-storage" },
-  ),
-)
+export const useInvoiceStore = create<InvoiceState>((set, get) => ({
+  invoices: [],
+  fetchInvoices: async () => {
+    const res = await fetch('/api/invoices')
+    const data = await res.json()
+    set({ invoices: data })
+  },
+  createInvoiceFromQuote: async (quote) => {
+    const res = await fetch('/api/invoices', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        quoteId: quote.id,
+        customer: quote.name,
+        items: quote.items,
+        amount: quote.items.reduce(
+          (sum, item) => sum + item.price * item.quantity,
+          0,
+        ),
+      }),
+    })
+    const invoice = await res.json()
+    if (res.ok) {
+      set((state) => ({ invoices: [invoice, ...state.invoices] }))
+    }
+    return invoice
+  },
+  getInvoiceForQuote: (id) => get().invoices.find((inv) => inv.quoteId === id),
+}))
 
 // Payment Method Store
 interface PaymentMethodState {
@@ -404,3 +410,23 @@ export const usePaymentStore = create<PaymentState>((set) => ({
     }
   },
 }))
+
+// Invoice Settings Store
+interface InvoiceSettingState {
+  settings: {
+    startNumber: number
+    footer: string
+    logo: string
+  }
+  updateSettings: (s: InvoiceSettingState['settings']) => void
+}
+
+export const useInvoiceSettingStore = create<InvoiceSettingState>()(
+  persist(
+    (set) => ({
+      settings: { startNumber: 1, footer: '', logo: '' },
+      updateSettings: (s) => set({ settings: s }),
+    }),
+    { name: 'invoice-setting-storage' },
+  ),
+)
