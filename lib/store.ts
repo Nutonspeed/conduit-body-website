@@ -9,6 +9,8 @@ import type {
   Invoice,
   PaymentMethod,
   PaymentLog,
+  Receipt,
+  CreditNote,
 } from "./mockData"
 import {
   products as initialProducts,
@@ -402,5 +404,35 @@ export const usePaymentStore = create<PaymentState>((set) => ({
         payments: state.payments.map((p) => (p.id === id ? updated : p)),
       }))
     }
+  },
+}))
+
+// Receipt Store
+interface ReceiptState {
+  receipts: Receipt[]
+  fetchReceipts: () => Promise<void>
+}
+
+export const useReceiptStore = create<ReceiptState>((set) => ({
+  receipts: [],
+  fetchReceipts: async () => {
+    const res = await fetch('/api/receipts')
+    const data = await res.json()
+    set({ receipts: data })
+  },
+}))
+
+// Credit Note Store
+interface CreditNoteState {
+  notes: CreditNote[]
+  fetchNotes: () => Promise<void>
+}
+
+export const useCreditNoteStore = create<CreditNoteState>((set) => ({
+  notes: [],
+  fetchNotes: async () => {
+    const res = await fetch('/api/credit-notes')
+    const data = await res.json()
+    set({ notes: data })
   },
 }))
