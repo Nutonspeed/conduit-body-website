@@ -636,3 +636,24 @@ export interface Invoice {
 
 export const mockInvoiceHistory: Invoice[] = []
 
+
+export interface PaymentMethod {
+  id: string
+  name: string
+  account: string
+}
+
+export interface PaymentLog {
+  id: string
+  methodId: string
+  amount: number
+  slip: string
+  status: 'pending' | 'verified'
+  uploadedAt: string
+}
+
+export const mockPaymentMethods: PaymentMethod[] = [
+  { id: '1', name: 'โอนผ่านธนาคาร SCB', account: '123-456789-0' },
+]
+
+export const mockPaymentLogs: PaymentLog[] = []
