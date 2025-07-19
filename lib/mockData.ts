@@ -636,3 +636,14 @@ export interface Invoice {
 
 export const mockInvoiceHistory: Invoice[] = []
 
+
+export interface Coupon {
+  id: string
+  code: string
+  discount: number
+  expiresAt: string
+  createdAt: string
+}
+
+export const mockCoupons: Coupon[] = []
+

@@ -21,7 +21,7 @@ type ViewMode = "grid" | "list"
 
 export default function ProductsPage() {
   const searchParams = useSearchParams()
-  const { addItem } = useQuoteCartStore()
+  const { addItem, discountPercent } = useQuoteCartStore()
   const [searchTerm, setSearchTerm] = useState("")
   const [selectedTypes, setSelectedTypes] = useState<string[]>([])
   const [selectedMaterials, setSelectedMaterials] = useState<string[]>([])
@@ -326,7 +326,12 @@ export default function ProductsPage() {
                     {viewMode === "grid" ? (
                       <Card className="hover:shadow-xl transition-all duration-300 hover:scale-105 h-full">
                         <CardHeader className="p-4">
-                          <div className="aspect-square bg-gray-100 rounded-lg mb-4 flex items-center justify-center overflow-hidden">
+                          <div className="relative aspect-square bg-gray-100 rounded-lg mb-4 flex items-center justify-center overflow-hidden">
+                            {discountPercent() > 0 && (
+                              <Badge className="absolute top-2 left-2" variant="destructive">
+                                -{discountPercent()}%
+                              </Badge>
+                            )}
                             <Image
                               src={product.image || "/placeholder.svg"}
                               alt={product.name}
@@ -357,7 +362,9 @@ export default function ProductsPage() {
                               )}
                             </div>
                             <p className="text-xl font-bold text-blue-600 mb-4">
-                              เริ่มต้น ฿{product.basePrice.toLocaleString()}
+                              เริ่มต้น ฿{(
+                                product.basePrice * (1 - discountPercent() / 100)
+                              ).toLocaleString()}
                             </p>
                           </div>
                           <div className="flex gap-2">
@@ -386,7 +393,12 @@ export default function ProductsPage() {
                       <Card className="hover:shadow-lg transition-shadow">
                         <CardContent className="p-4">
                           <div className="flex gap-4">
-                            <div className="w-24 h-24 bg-gray-100 rounded-lg flex items-center justify-center overflow-hidden flex-shrink-0">
+                            <div className="relative w-24 h-24 bg-gray-100 rounded-lg flex items-center justify-center overflow-hidden flex-shrink-0">
+                              {discountPercent() > 0 && (
+                                <Badge className="absolute top-1 left-1" variant="destructive">
+                                  -{discountPercent()}%
+                                </Badge>
+                              )}
                               <Image
                                 src={product.image || "/placeholder.svg"}
                                 alt={product.name}
@@ -419,7 +431,9 @@ export default function ProductsPage() {
                               </div>
                             </div>
                             <div className="text-right flex flex-col justify-between">
-                              <p className="text-xl font-bold text-blue-600">฿{product.basePrice.toLocaleString()}</p>
+                              <p className="text-xl font-bold text-blue-600">฿{(
+                                product.basePrice * (1 - discountPercent() / 100)
+                              ).toLocaleString()}</p>
                               <div className="flex flex-col gap-2">
                                 <Button asChild size="sm">
                                   <Link href={`/products/${product.slug}`}>ดูรายละเอียด</Link>

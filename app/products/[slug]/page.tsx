@@ -22,7 +22,7 @@ interface ProductPageProps {
 
 export default function ProductPage({ params }: ProductPageProps) {
   const product = products.find((p) => p.slug === params.slug)
-  const { addItem } = useQuoteCartStore()
+  const { addItem, discountPercent } = useQuoteCartStore()
 
   if (!product) {
     notFound()
@@ -77,7 +77,9 @@ export default function ProductPage({ params }: ProductPageProps) {
             <p className="text-lg text-gray-600 mb-6 font-sarabun">{product.description}</p>
 
             <div className="bg-blue-50 p-4 rounded-lg mb-6">
-              <p className="text-2xl font-bold text-blue-600 mb-2">เริ่มต้น ฿{product.basePrice.toLocaleString()}</p>
+              <p className="text-2xl font-bold text-blue-600 mb-2">เริ่มต้น ฿{(
+                product.basePrice * (1 - discountPercent() / 100)
+              ).toLocaleString()}</p>
               <p className="text-sm text-gray-600 font-sarabun">*ราคาขึ้นอยู่กับขนาดและจำนวน</p>
             </div>
 
@@ -185,7 +187,12 @@ export default function ProductPage({ params }: ProductPageProps) {
               .map((relatedProduct) => (
                 <Card key={relatedProduct.id} className="hover:shadow-lg transition-shadow">
                   <CardHeader className="p-4">
-                    <div className="aspect-square bg-gray-100 rounded-lg mb-4 flex items-center justify-center">
+                    <div className="relative aspect-square bg-gray-100 rounded-lg mb-4 flex items-center justify-center">
+                      {discountPercent() > 0 && (
+                        <Badge className="absolute top-2 left-2" variant="destructive">
+                          -{discountPercent()}%
+                        </Badge>
+                      )}
                       <Image
                         src="/placeholder.svg?height=150&width=150"
                         alt={relatedProduct.name}
@@ -198,7 +205,9 @@ export default function ProductPage({ params }: ProductPageProps) {
                   </CardHeader>
                   <CardContent className="p-4 pt-0">
                     <p className="text-lg font-bold text-blue-600 mb-3">
-                      เริ่มต้น ฿{relatedProduct.basePrice.toLocaleString()}
+                      เริ่มต้น ฿{(
+                        relatedProduct.basePrice * (1 - discountPercent() / 100)
+                      ).toLocaleString()}
                     </p>
                     <Button asChild className="w-full" size="sm">
                       <Link href={`/products/${relatedProduct.slug}`}>ดูรายละเอียด</Link>
