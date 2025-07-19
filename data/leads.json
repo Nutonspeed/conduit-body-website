@@ -1,0 +1,68 @@
+[
+  {
+    "id": "1",
+    "customerName": "สมชาย วิศวกร",
+    "company": "บริษัท ABC เอ็นจิเนียริ่ง จำกัด",
+    "phone": "081-234-5678",
+    "email": "somchai@abc-eng.com",
+    "address": "123 ถนนสุขุมวิท กรุงเทพฯ 10110",
+    "productInterest": "Conduit Bodies - Type LB Premium",
+    "size": "1",
+    "quantity": 50,
+    "notes": ["ลูกค้าสนใจขอใบเสนอราคาจำนวนมาก", "ขอใบเสนอราคาพิเศษ"],
+    "status": "กำลังเจรจา",
+    "createdAt": "2024-01-15T10:30:00Z"
+  },
+  {
+    "id": "2",
+    "customerName": "นิรันดร์ ช่างไฟฟ้า",
+    "company": "บริษัท XYZ คอนสตรัคชั่น จำกัด",
+    "phone": "082-345-6789",
+    "email": "nirand@xyz-const.com",
+    "address": "456 ถนนพหลโยธิน นนทบุรี 11000",
+    "productInterest": "Conduit Bodies - Type C Standard",
+    "size": "3/4",
+    "quantity": 20,
+    "notes": ["ต้องการของเร็ว ภายใน 3 วัน"],
+    "status": "รอติดต่อ",
+    "createdAt": "2024-01-16T14:15:00Z"
+  },
+  {
+    "id": "3",
+    "customerName": "ประยุทธ์ หัวหน้าโครงการ",
+    "company": "บริษัท DEF อินดัสเตรียล จำกัด",
+    "phone": "083-456-7890",
+    "email": "prayuth@def-ind.com",
+    "productInterest": "Conduit Bodies - Type T Premium",
+    "size": "2",
+    "quantity": 10,
+    "notes": ["โครงการใหญ่ อาจสั่งเพิ่ม", "ปิดการขายเรียบร้อย ส่งของแล้ว"],
+    "status": "ปิดการขาย",
+    "createdAt": "2024-01-14T09:20:00Z"
+  },
+  {
+    "id": "4",
+    "customerName": "วิชัย ผู้จัดการ",
+    "company": "ห้างหุ้นส่วน GHI อิเล็คทริค",
+    "phone": "084-567-8901",
+    "email": "wichai@ghi-elec.com",
+    "productInterest": "Conduit Bodies - Type LL Premium",
+    "size": "1-1/2",
+    "quantity": 30,
+    "notes": ["ลูกค้าประจำ ให้ราคาพิเศษ"],
+    "status": "กำลังเจรจา",
+    "createdAt": "2024-01-17T11:45:00Z"
+  },
+  {
+    "id": "5",
+    "customerName": "สุรชัย ช่างเทคนิค",
+    "phone": "085-678-9012",
+    "email": "surachai@email.com",
+    "productInterest": "Conduit Bodies - Type LR Premium",
+    "size": "1/2",
+    "quantity": 5,
+    "notes": [],
+    "status": "รอติดต่อ",
+    "createdAt": "2024-01-18T16:30:00Z"
+  }
+]

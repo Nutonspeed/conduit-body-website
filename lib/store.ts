@@ -10,8 +10,6 @@ import type {
 } from "./mockData"
 import {
   products as initialProducts,
-  mockLeads,
-  mockQuotes,
   mockInvoiceHistory,
 } from "./mockData"
 
@@ -112,67 +110,72 @@ export const useCustomerStore = create<CustomerState>((set) => ({
 // Lead Store
 interface LeadState {
   leads: Lead[]
-  addLead: (lead: Omit<Lead, "id" | "createdAt">) => void
-  updateLead: (id: string, lead: Partial<Lead>) => void
-  updateLeadStatus: (id: string, status: Lead["status"]) => void
-  addNote: (id: string, note: string) => void
-  deleteLead: (id: string) => void
+  fetchLeads: () => Promise<void>
+  addLead: (lead: Omit<Lead, "id" | "createdAt">) => Promise<void>
+  updateLead: (id: string, lead: Partial<Lead>) => Promise<void>
+  updateLeadStatus: (id: string, status: Lead["status"]) => Promise<void>
+  addNote: (id: string, note: string) => Promise<void>
+  deleteLead: (id: string) => Promise<void>
 }
 
-export const useLeadStore = create<LeadState>()(
-  persist(
-    (set) => ({
-      leads: mockLeads,
-      addLead: (lead) =>
-        set((state) => ({
-          leads: [
-            {
-              ...lead,
-              id: Date.now().toString(),
-              createdAt: new Date().toISOString(),
-            },
-            ...state.leads,
-          ],
-        })),
-      updateLead: (id, updatedLead) =>
-        set((state) => ({
-          leads: state.leads.map((lead) => (lead.id === id ? { ...lead, ...updatedLead } : lead)),
-        })),
-      updateLeadStatus: (id, status) =>
-        set((state) => {
-          const updated = state.leads.map((lead) =>
-            lead.id === id ? { ...lead, status } : lead,
-          )
-          const lead = state.leads.find((l) => l.id === id)
-          if (status === "ปิดการขาย" && lead) {
-            const { addCustomer } = useCustomerStore.getState()
-            addCustomer({
-              name: lead.customerName,
-              phone: lead.phone,
-              from: "lead",
-              contactCount: lead.notes ? lead.notes.length : 1,
-            })
-          }
-          return { leads: updated }
-        }),
-      addNote: (id, note) =>
-        set((state) => ({
-          leads: state.leads.map((lead) =>
-            lead.id === id
-              ? { ...lead, notes: [...(lead.notes ?? []), note] }
-              : lead,
-          ),
-        })),
-      deleteLead: (id) =>
-        set((state) => ({
-          leads: state.leads.filter((lead) => lead.id !== id),
-        })),
-    }),
-    {
-      name: "lead-storage",
-    },
-  ),
-)
+export const useLeadStore = create<LeadState>((set, get) => ({
+  leads: [],
+  fetchLeads: async () => {
+    const res = await fetch("/api/leads")
+    const data = await res.json()
+    set({ leads: data })
+  },
+  addLead: async (lead) => {
+    const res = await fetch("/api/leads", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(lead),
+    })
+    if (res.ok) {
+      const newLead = await res.json()
+      set((state) => ({ leads: [newLead, ...state.leads] }))
+    }
+  },
+  updateLead: async (id, updatedLead) => {
+    const res = await fetch(`/api/leads/${id}`, {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(updatedLead),
+    })
+    if (res.ok) {
+      const updated = await res.json()
+      set((state) => ({
+        leads: state.leads.map((lead) => (lead.id === id ? updated : lead)),
+      }))
+    }
+  },
+  updateLeadStatus: async (id, status) => {
+    const lead = get().leads.find((l) => l.id === id)
+    if (!lead) return
+    await get().updateLead(id, { status })
+    if (status === "ปิดการขาย") {
+      const { addCustomer } = useCustomerStore.getState()
+      addCustomer({
+        name: lead.customerName,
+        phone: lead.phone,
+        from: "lead",
+        contactCount: lead.notes ? lead.notes.length : 1,
+      })
+    }
+  },
+  addNote: async (id, note) => {
+    const lead = get().leads.find((l) => l.id === id)
+    if (!lead) return
+    const notes = [...(lead.notes ?? []), note]
+    await get().updateLead(id, { notes })
+  },
+  deleteLead: async (id) => {
+    const res = await fetch(`/api/leads/${id}`, { method: "DELETE" })
+    if (res.ok) {
+      set((state) => ({ leads: state.leads.filter((lead) => lead.id !== id) }))
+    }
+  },
+}))
 
 // Marketing Store
 interface MarketingState {
@@ -263,49 +266,55 @@ export const useQuoteCartStore = create<QuoteCartState>()(
 // Quote Store
 interface QuoteState {
   quotes: QuoteRequest[]
+  fetchQuotes: () => Promise<void>
   addQuote: (
     quote: Omit<QuoteRequest, "id" | "createdAt" | "status">
-  ) => void
-  updateStatus: (id: string, status: QuoteRequest["status"]) => void
+  ) => Promise<void>
+  updateStatus: (id: string, status: QuoteRequest["status"]) => Promise<void>
 }
 
-export const useQuoteStore = create<QuoteState>()(
-  persist(
-    (set) => ({
-      quotes: mockQuotes,
-      addQuote: (quote) =>
-        set((state) => ({
-          quotes: [
-            {
-              ...quote,
-              id: Date.now().toString(),
-              status: "ใหม่",
-              createdAt: new Date().toISOString(),
-            },
-            ...state.quotes,
-          ],
-        })),
-      updateStatus: (id, status) =>
-        set((state) => {
-          const updated = state.quotes.map((q) =>
-            q.id === id ? { ...q, status } : q,
-          )
-          const quote = state.quotes.find((q) => q.id === id)
-          if (status === "ปิดการขาย" && quote) {
-            const { addCustomer } = useCustomerStore.getState()
-            addCustomer({
-              name: quote.name,
-              phone: quote.phone,
-              from: "quote",
-              contactCount: 1,
-            })
-          }
-          return { quotes: updated }
-        }),
-    }),
-    { name: "quote-storage" },
-  ),
-)
+export const useQuoteStore = create<QuoteState>((set, get) => ({
+  quotes: [],
+  fetchQuotes: async () => {
+    const res = await fetch("/api/quotes")
+    const data = await res.json()
+    set({ quotes: data })
+  },
+  addQuote: async (quote) => {
+    const res = await fetch("/api/quotes", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(quote),
+    })
+    if (res.ok) {
+      const newQuote = await res.json()
+      set((state) => ({ quotes: [newQuote, ...state.quotes] }))
+    }
+  },
+  updateStatus: async (id, status) => {
+    const res = await fetch(`/api/quotes/${id}`, {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ status }),
+    })
+    if (res.ok) {
+      const updated = await res.json()
+      set((state) => ({
+        quotes: state.quotes.map((q) => (q.id === id ? updated : q)),
+      }))
+      if (status === "ปิดการขาย") {
+        const { addCustomer } = useCustomerStore.getState()
+        const quote = get().quotes.find((q) => q.id === id) || updated
+        addCustomer({
+          name: quote.name,
+          phone: quote.phone,
+          from: "quote",
+          contactCount: 1,
+        })
+      }
+    }
+  },
+}))
 
 interface InvoiceState {
   invoices: Invoice[]

@@ -14,15 +14,17 @@ import { useToast } from "@/hooks/use-toast"
 export default function AdminQuotes() {
   const router = useRouter()
   const { isAuthenticated } = useAuthStore()
-  const { quotes, updateStatus } = useQuoteStore()
+  const { quotes, fetchQuotes, updateStatus } = useQuoteStore()
   const { createInvoiceFromQuote, getInvoiceForQuote } = useInvoiceStore()
   const { toast } = useToast()
 
   useEffect(() => {
     if (!isAuthenticated) {
       router.push("/admin/login")
+    } else {
+      fetchQuotes()
     }
-  }, [isAuthenticated, router])
+  }, [isAuthenticated, router, fetchQuotes])
 
   if (!isAuthenticated) {
     return null
