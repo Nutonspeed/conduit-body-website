@@ -346,3 +346,123 @@ export const useInvoiceStore = create<InvoiceState>()(
     { name: "invoice-storage" },
   ),
 )
+
+// File Store
+interface FileItem {
+  id: string
+  name: string
+  uploadedAt: string
+}
+interface FileState {
+  files: FileItem[]
+  fetchFiles: () => Promise<void>
+  uploadFile: (name: string) => Promise<void>
+  deleteFile: (id: string) => Promise<void>
+}
+
+export const useFileStore = create<FileState>((set) => ({
+  files: [],
+  fetchFiles: async () => {
+    const res = await fetch('/api/upload')
+    const data = await res.json()
+    set({ files: data })
+  },
+  uploadFile: async (name) => {
+    const res = await fetch('/api/upload', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ filename: name }),
+    })
+    if (res.ok) {
+      const file = await res.json()
+      set((state) => ({ files: [file, ...state.files] }))
+    }
+  },
+  deleteFile: async (id) => {
+    const res = await fetch(`/api/upload/${id}`, { method: 'DELETE' })
+    if (res.ok) {
+      set((state) => ({ files: state.files.filter((f) => f.id !== id) }))
+    }
+  },
+}))
+
+// Log Store
+interface LogItem {
+  id: string
+  message: string
+  createdAt: string
+}
+interface LogState {
+  logs: LogItem[]
+  fetchLogs: () => Promise<void>
+}
+
+export const useLogStore = create<LogState>((set) => ({
+  logs: [],
+  fetchLogs: async () => {
+    const res = await fetch('/api/logs')
+    const data = await res.json()
+    set({ logs: data })
+  },
+}))
+
+// User Store
+interface UserItem {
+  id: string
+  name: string
+  role: string
+}
+interface UserState {
+  users: UserItem[]
+  fetchUsers: () => Promise<void>
+  updateRole: (id: string, role: string) => Promise<void>
+}
+
+export const useUserStore = create<UserState>((set) => ({
+  users: [],
+  fetchUsers: async () => {
+    const res = await fetch('/api/users')
+    const data = await res.json()
+    set({ users: data })
+  },
+  updateRole: async (id, role) => {
+    const res = await fetch(`/api/users/${id}`, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ role }),
+    })
+    if (res.ok) {
+      const updated = await res.json()
+      set((state) => ({
+        users: state.users.map((u) => (u.id === id ? updated : u)),
+      }))
+    }
+  },
+}))
+
+// Setting Store
+interface SettingState {
+  storeOpen: boolean
+  fetchSettings: () => Promise<void>
+  toggleStore: (open: boolean) => Promise<void>
+}
+
+export const useSettingStore = create<SettingState>((set) => ({
+  storeOpen: true,
+  fetchSettings: async () => {
+    const res = await fetch('/api/settings')
+    const data = await res.json()
+    set({ storeOpen: data.storeOpen })
+  },
+  toggleStore: async (open) => {
+    const res = await fetch('/api/settings', {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ storeOpen: open }),
+    })
+    if (res.ok) {
+      const data = await res.json()
+      set({ storeOpen: data.storeOpen })
+    }
+  },
+}))
