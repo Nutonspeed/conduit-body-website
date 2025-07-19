@@ -657,3 +657,29 @@ export const mockPaymentMethods: PaymentMethod[] = [
 ]
 
 export const mockPaymentLogs: PaymentLog[] = []
+
+export interface ReceiptItem {
+  description: string
+  quantity: number
+  price: number
+}
+
+export interface Receipt {
+  id: string
+  orderId: string
+  items: ReceiptItem[]
+  total: number
+  issuedAt: string
+}
+
+export const mockReceipts: Receipt[] = []
+
+export interface CreditNote {
+  id: string
+  receiptId: string
+  reason: string
+  amount: number
+  createdAt: string
+}
+
+export const mockCreditNotes: CreditNote[] = []
