@@ -9,10 +9,12 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Badge } from "@/components/ui/badge"
 import { Separator } from "@/components/ui/separator"
 import { ShoppingCart, Plus, Minus, Trash2 } from "lucide-react"
 import { products } from "@/lib/mockData"
+import { useAddressStore } from "@/lib/store"
 
 interface CartItem {
   productId: string
@@ -35,6 +37,8 @@ export default function OrderPage() {
     address: "",
     notes: "",
   })
+  const { addresses, fetchAddresses } = useAddressStore()
+  const [selectedAddress, setSelectedAddress] = useState<string | null>(null)
 
   useEffect(() => {
     if (productSlug) {
@@ -44,6 +48,10 @@ export default function OrderPage() {
       }
     }
   }, [productSlug])
+
+  useEffect(() => {
+    fetchAddresses()
+  }, [fetchAddresses])
 
   const addToCart = (productId: string, productName: string, size: string, price: number) => {
     setCartItems((prev) => {
@@ -288,11 +296,37 @@ export default function OrderPage() {
                     <Label htmlFor="address" className="font-sarabun">
                       ที่อยู่จัดส่ง
                     </Label>
+                    {addresses.length > 0 && (
+                      <Select
+                        value={selectedAddress || ''}
+                        onValueChange={(val) => {
+                          setSelectedAddress(val)
+                          const addr = addresses.find((a) => a.id === val)
+                          if (addr) {
+                            setCustomerInfo((p) => ({ ...p, address: addr.address }))
+                          }
+                        }}
+                      >
+                        <SelectTrigger className="mb-2">
+                          <SelectValue placeholder="เลือกจากสมุดที่อยู่" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          {addresses.map((a) => (
+                            <SelectItem key={a.id} value={a.id}>
+                              {a.label}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                    )}
                     <Textarea
                       id="address"
                       rows={3}
                       value={customerInfo.address}
-                      onChange={(e) => setCustomerInfo((prev) => ({ ...prev, address: e.target.value }))}
+                      onChange={(e) => {
+                        setSelectedAddress(null)
+                        setCustomerInfo((prev) => ({ ...prev, address: e.target.value }))
+                      }}
                       placeholder="ที่อยู่สำหรับจัดส่งสินค้า"
                     />
                   </div>

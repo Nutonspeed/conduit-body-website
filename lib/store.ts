@@ -346,3 +346,115 @@ export const useInvoiceStore = create<InvoiceState>()(
     { name: "invoice-storage" },
   ),
 )
+
+// Delivery Method Store
+export interface DeliveryMethod {
+  id: string
+  name: string
+  price: number
+}
+
+interface DeliveryMethodState {
+  deliveryMethods: DeliveryMethod[]
+  fetchDeliveryMethods: () => Promise<void>
+  addDeliveryMethod: (method: Omit<DeliveryMethod, 'id'>) => Promise<void>
+  updateDeliveryMethod: (id: string, method: Partial<DeliveryMethod>) => Promise<void>
+  deleteDeliveryMethod: (id: string) => Promise<void>
+}
+
+export const useDeliveryMethodStore = create<DeliveryMethodState>((set) => ({
+  deliveryMethods: [],
+  fetchDeliveryMethods: async () => {
+    const res = await fetch('/api/delivery-methods')
+    const data = await res.json()
+    set({ deliveryMethods: data })
+  },
+  addDeliveryMethod: async (method) => {
+    const res = await fetch('/api/delivery-methods', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(method),
+    })
+    if (res.ok) {
+      const newMethod = await res.json()
+      set((state) => ({ deliveryMethods: [...state.deliveryMethods, newMethod] }))
+    }
+  },
+  updateDeliveryMethod: async (id, method) => {
+    const res = await fetch(`/api/delivery-methods/${id}`, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(method),
+    })
+    if (res.ok) {
+      const updated = await res.json()
+      set((state) => ({
+        deliveryMethods: state.deliveryMethods.map((m) =>
+          m.id === id ? updated : m,
+        ),
+      }))
+    }
+  },
+  deleteDeliveryMethod: async (id) => {
+    const res = await fetch(`/api/delivery-methods/${id}`, { method: 'DELETE' })
+    if (res.ok) {
+      set((state) => ({
+        deliveryMethods: state.deliveryMethods.filter((m) => m.id !== id),
+      }))
+    }
+  },
+}))
+
+// Address Book Store
+export interface AddressItem {
+  id: string
+  label: string
+  address: string
+}
+
+interface AddressState {
+  addresses: AddressItem[]
+  fetchAddresses: () => Promise<void>
+  addAddress: (addr: Omit<AddressItem, 'id'>) => Promise<void>
+  updateAddress: (id: string, addr: Partial<AddressItem>) => Promise<void>
+  deleteAddress: (id: string) => Promise<void>
+}
+
+export const useAddressStore = create<AddressState>((set) => ({
+  addresses: [],
+  fetchAddresses: async () => {
+    const res = await fetch('/api/addresses')
+    const data = await res.json()
+    set({ addresses: data })
+  },
+  addAddress: async (addr) => {
+    const res = await fetch('/api/addresses', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(addr),
+    })
+    if (res.ok) {
+      const newAddr = await res.json()
+      set((state) => ({ addresses: [...state.addresses, newAddr] }))
+    }
+  },
+  updateAddress: async (id, addr) => {
+    const res = await fetch(`/api/addresses/${id}`, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(addr),
+    })
+    if (res.ok) {
+      const updated = await res.json()
+      set((state) => ({
+        addresses: state.addresses.map((a) => (a.id === id ? updated : a)),
+      }))
+    }
+  },
+  deleteAddress: async (id) => {
+    const res = await fetch(`/api/addresses/${id}`, { method: 'DELETE' })
+    if (res.ok) {
+      set((state) => ({ addresses: state.addresses.filter((a) => a.id !== id) }))
+    }
+  },
+}))
