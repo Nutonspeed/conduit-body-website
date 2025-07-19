@@ -1,0 +1,16 @@
+[
+  {
+    "id": "1710000001",
+    "customer": "บริษัท ก ข จำกัด",
+    "items": [
+      {
+        "name": "Conduit Body Type C",
+        "size": "1\"",
+        "quantity": 10,
+        "price": 380
+      }
+    ],
+    "createdAt": "2024-05-10T00:00:00.000Z",
+    "total": 3800
+  }
+]

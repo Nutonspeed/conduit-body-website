@@ -337,3 +337,66 @@ export const useInvoiceStore = create<InvoiceState>()(
     { name: "invoice-storage" },
   ),
 )
+
+interface Order {
+  id: string;
+  customer: string;
+  items: { name: string; size: string; quantity: number; price: number }[];
+  total: number;
+  createdAt: string;
+}
+
+interface OrderState {
+  orders: Order[];
+  fetchOrders: () => Promise<void>;
+}
+export const useOrderStore = create<OrderState>((set) => ({
+  orders: [],
+  fetchOrders: async () => {
+    const res = await fetch("/api/orders");
+    const data = await res.json();
+    set({ orders: data });
+  },
+}));
+
+// Notification Store
+interface Notification {
+  id: string
+  message: string
+  read: boolean
+  createdAt: string
+}
+
+interface NotificationState {
+  notifications: Notification[]
+  fetchNotifications: () => Promise<void>
+  markRead: (id: string) => Promise<void>
+  deleteNotification: (id: string) => Promise<void>
+}
+
+export const useNotificationStore = create<NotificationState>((set) => ({
+  notifications: [],
+  fetchNotifications: async () => {
+    const res = await fetch('/api/notifications')
+    const data = await res.json()
+    set({ notifications: data })
+  },
+  markRead: async (id) => {
+    await fetch(`/api/notifications/${id}`, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ read: true }),
+    })
+    set((state) => ({
+      notifications: state.notifications.map((n) =>
+        n.id === id ? { ...n, read: true } : n
+      ),
+    }))
+  },
+  deleteNotification: async (id) => {
+    await fetch(`/api/notifications/${id}`, { method: 'DELETE' })
+    set((state) => ({
+      notifications: state.notifications.filter((n) => n.id !== id),
+    }))
+  },
+}))
