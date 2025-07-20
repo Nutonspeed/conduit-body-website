@@ -47,6 +47,93 @@ export const useAuthStore = create<AuthState>()(
   ),
 )
 
+// Workflow Automation Store
+interface AutomationRule {
+  id: string
+  event: string
+  action: "send_broadcast" | "create_ticket"
+}
+
+interface AutomationLog {
+  id: string
+  message: string
+  timestamp: string
+}
+
+interface AutomationState {
+  rules: AutomationRule[]
+  logs: AutomationLog[]
+  addRule: (event: string, action: AutomationRule["action"]) => void
+  deleteRule: (id: string) => void
+  triggerEvent: (event: string) => void
+  sendBroadcast: () => void
+  createTicket: () => void
+}
+
+export const useAutomationStore = create<AutomationState>()(
+  persist(
+    (set, get) => ({
+      rules: [],
+      logs: [],
+      addRule: (event, action) =>
+        set((state) => ({
+          rules: [
+            ...state.rules,
+            { id: Date.now().toString(), event, action },
+          ],
+        })),
+      deleteRule: (id) =>
+        set((state) => ({
+          rules: state.rules.filter((r) => r.id !== id),
+        })),
+      triggerEvent: (event) => {
+        console.log("Event triggered:", event)
+        set((state) => ({
+          logs: [
+            { id: Date.now().toString(), message: `Event: ${event}`,
+timestamp: new Date().toISOString() },
+            ...state.logs,
+          ],
+        }))
+        const { rules, sendBroadcast, createTicket } = get()
+        rules
+          .filter((r) => r.event === event)
+          .forEach((r) => {
+            if (r.action === "send_broadcast") sendBroadcast()
+            if (r.action === "create_ticket") createTicket()
+          })
+      },
+      sendBroadcast: () => {
+        console.log("Sending broadcast message")
+        set((state) => ({
+          logs: [
+            {
+              id: Date.now().toString(),
+              message: "Action: send broadcast",
+              timestamp: new Date().toISOString(),
+            },
+            ...state.logs,
+          ],
+        }))
+      },
+      createTicket: () => {
+        console.log("Creating support ticket")
+        set((state) => ({
+          logs: [
+            {
+              id: Date.now().toString(),
+              message: "Action: create support ticket",
+              timestamp: new Date().toISOString(),
+            },
+            ...state.logs,
+          ],
+        }))
+      },
+    }),
+    { name: "automation-storage" },
+  ),
+)
+
 // Product Store
 interface ProductState {
   products: Product[]
